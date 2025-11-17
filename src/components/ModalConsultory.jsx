@@ -11,7 +11,7 @@ export const ModalConsultory = () => {
       status: true,
     },
   });
-  const { mutate } = useAgregarConsultorioMutation();
+  const { mutate,isPending } = useAgregarConsultorioMutation();
 
   const onSubmit = (formData) => {
     const payload = {
@@ -161,9 +161,10 @@ export const ModalConsultory = () => {
               </button>
               <button
                 type="submit"
+                disabled={isPending}
                 className="px-4 py-2 text-sm font-medium text-white bg-cyan-600 hover:bg-cyan-700 rounded-lg transition-colors"
               >
-                Guardar consultorio
+                {isPending ? "Guardando..." : "Guardar consultorio"}
               </button>
             </div>
           </form>

@@ -9,7 +9,7 @@ export const ModalUser = () => {
   const role = watch("role");
 
   const { data: specialties } = useMostrarEspecilitiesQuery();
-  const { mutate } = useAgregarUsuariosMutation();
+  const { mutate,isPending } = useAgregarUsuariosMutation();
 
   const onSubmit = (data) => {
     console.log(data);
@@ -146,9 +146,10 @@ export const ModalUser = () => {
               </button>
               <button
                 type="submit"
+                disabled={isPending}
                 className="px-4 py-2 text-sm font-medium text-white bg-cyan-600 hover:bg-cyan-700 rounded-lg transition-colors"
               >
-                Guardar usuario
+                {isPending ? "Guardando..." : "Guardar usuario"}
               </button>
             </div>
           </form>

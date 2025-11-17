@@ -14,7 +14,7 @@ export const LoginPage = () => {
     formState: { errors },
   } = useForm();
 
-  const { mutate, isLoading } = useLoginMutate();
+  const { mutate, isPending } = useLoginMutate();
 
   const onSubmit = (data) => {
     mutate(data);
@@ -72,12 +72,14 @@ export const LoginPage = () => {
           </div>
           <button
             type="submit"
-            disabled={isLoading}
-            className={`bg-blue-500 transition-colors duration-300 w-full text-white p-2 rounded-lg ${
-              isLoading ? "opacity-70 cursor-not-allowed" : "hover:bg-blue-300"
+            disabled={isPending}
+            className={`bg-blue-500 transition-colors duration-300 w-full text-white p-2 rounded-lg cursor-pointer ${
+              isPending
+                ? "opacity-70 cursor-not-allowed"
+                : "hover:bg-blue-300"
             }`}
           >
-            {isLoading ? (
+            {isPending ? (
               <span className="flex items-center justify-center gap-2">
                 <Icon
                   icon="line-md:loading-twotone-loop"

@@ -9,7 +9,7 @@ export const ModalHistoryMedic = () => {
   const { setModalHistoryMedicState } = useHistoryMedicStore();
   const { control, handleSubmit, setValue } = useForm();
   const { data: patients = [], isLoading } = useMostrarPacientesQuery();
-  const { mutate } = useAgregarHistoriaMedicaMutation();
+  const { mutate, isPending } = useAgregarHistoriaMedicaMutation();
   const { user } = useAuthStore();
   
   const [searchTerm, setSearchTerm] = useState("");
@@ -234,9 +234,10 @@ export const ModalHistoryMedic = () => {
               </button>
               <button
                 onClick={handleSubmit(onSubmit)}
+                disabled={isPending}
                 className="px-4 py-2 text-sm font-medium text-white bg-cyan-600 hover:bg-cyan-700 rounded-lg transition-colors"
               >
-                Guardar registro
+                {isPending ? "Guardando..." : "Guardar registro"}
               </button>
             </div>
           </div>

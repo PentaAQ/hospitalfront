@@ -64,7 +64,7 @@ export const ModalHorary = () => {
       status: true,
     },
   });
-  const { mutate: agregarHorario } = useAgregarHorarioMutation();
+  const { mutate: agregarHorario, isPending } = useAgregarHorarioMutation();
 
   const { data: specialties } = useMostrarEspecilitiesQuery();
   const { data: doctors } = useObtenerTodosLosDoctoresQuery();
@@ -379,9 +379,10 @@ export const ModalHorary = () => {
             </button>
             <button
               onClick={handleSubmit(onSubmit)}
+              disabled={isPending}
               className="px-5 py-2.5 text-sm font-medium text-white bg-cyan-600 hover:bg-cyan-700 rounded-lg transition-colors disabled:bg-slate-300 disabled:cursor-not-allowed"
             >
-              Crear horario
+              {isPending ? "Guardando..." : "Crear horario"}
             </button>
           </div>
         </div>

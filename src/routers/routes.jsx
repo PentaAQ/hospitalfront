@@ -9,6 +9,7 @@ import { UsersPage } from "../pages/UsersPage";
 import { HistoryMedicPage } from "../pages/HistoryMedicPage";
 import { PacientPage } from "../pages/PacientPage";
 import { ConsultoryPage } from "../pages/ConsultoryPage";
+import { AppointmentsPage } from "../pages/AppointmentsPage";
 
 export const MyRoutes = () => (
   <BrowserRouter>
@@ -37,6 +38,7 @@ export const MyRoutes = () => (
         <Route path="/historias" element={<HistoryMedicPage />} />
         <Route path="/pacientes" element={<PacientPage />} />
         <Route path="/consultorios" element={<ConsultoryPage />} />
+        <Route path="/citas" element={<AppointmentsPage />} />
       </Route>
     </Routes>
   </BrowserRouter>
