@@ -1,13 +1,17 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
+
+const baseURL = import.meta.env.VITE_BASE_URL;
+
 export const useAuthStore = create(
   persist(
     (set) => ({
       user: null,
+      token:null,
 
       login: async (p) => {
-        const response = await fetch("https://3t0p4dvn-8080.brs.devtunnels.ms/api/auth/login", {
+        const response = await fetch(`${baseURL}/api/auth/login`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -25,7 +29,7 @@ export const useAuthStore = create(
           throw new Error("Token no recibido");
         }
 
-        set({ user: data });
+        set({ user: data.employee, token: data.accessToken });
 
         return data;
       },

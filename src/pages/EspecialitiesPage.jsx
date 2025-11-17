@@ -20,6 +20,7 @@ export const EspecialitiesPage = () => {
             <tr>
               <th>Nombre</th>
               <th>Descripcion</th>
+              <th>Costo/Hora</th>
               <th>Acciones</th>
             </tr>
           </thead>

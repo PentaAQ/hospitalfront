@@ -1,8 +1,9 @@
 import { create } from "zustand";
+const baseURL = import.meta.env.VITE_BASE_URL;
 
 export const useEspecilitiesStore = create((set) => ({
   mostrarEspecilities: async (token) => {
-    const response = await fetch("https://3t0p4dvn-8080.brs.devtunnels.ms/api/specialties", {
+    const response = await fetch(`${baseURL}/api/specialties`, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
@@ -16,7 +17,7 @@ export const useEspecilitiesStore = create((set) => ({
   },
 
   agregarEspecilities: async (especialidad, token) => {
-    const response = await fetch("https://3t0p4dvn-8080.brs.devtunnels.ms/api/specialties", {
+    const response = await fetch(`${baseURL}/api/specialties`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

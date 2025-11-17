@@ -5,10 +5,10 @@ import { toast } from "sonner";
 
 export const useMostrarUsuariosQuery = () => {
   const { mostrarUsuarios } = useUserStore();
-  const { user } = useAuthStore();
+  const { token } = useAuthStore();
   return useQuery({
     queryKey: ["mostrarUsuarios"],
-    queryFn: () => mostrarUsuarios(user.accessToken),
+    queryFn: () => mostrarUsuarios(token),
     onSuccess: (data) => {
       console.log(data);
     },
@@ -36,20 +36,4 @@ export const useAgregarUsuariosMutation = () => {
       toast.error(error.message);
     },
   });
-};
-
-
-export const useObtenerUsuarioQuery = () => {
-    const { obtenerUsuario } = useUserStore();
-    const { user } = useAuthStore();
-    return useQuery({
-        queryKey: ["obtenerUsuario"],
-        queryFn: () => obtenerUsuario(user.employeDTO.dni, user.accessToken),
-        onSuccess: (data) => {
-            console.log(data);
-        },
-        onError: (error) => {
-            console.log(error);
-        },
-    });
 };

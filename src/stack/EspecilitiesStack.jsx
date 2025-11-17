@@ -5,10 +5,10 @@ import { toast } from "sonner";
 
 export const useMostrarEspecilitiesQuery = () => {
   const { mostrarEspecilities } = useEspecilitiesStore();
-  const { user } = useAuthStore();
+  const { token } = useAuthStore();
   return useQuery({
     queryKey: ["mostrarEspecilities"],
-    queryFn: () => mostrarEspecilities(user.accessToken),
+    queryFn: () => mostrarEspecilities(token),
 
     onSuccess: (data) => {
       console.log(data);
@@ -22,10 +22,10 @@ export const useMostrarEspecilitiesQuery = () => {
 export const useAgregarEspecilitiesMutation = () => {
    const queryClient = useQueryClient();
    const { setModalEspecilities, agregarEspecilities } = useEspecilitiesStore();
-   const { user } = useAuthStore();
+   const { token } = useAuthStore();
    return useMutation({
      mutationFn: (especialidad) =>
-       agregarEspecilities(especialidad, user.accessToken),
+       agregarEspecilities(especialidad, token),
      onSuccess: () => {
        queryClient.invalidateQueries({ queryKey: ["mostrarEspecilities"] });
        setModalEspecilities(false);

@@ -31,60 +31,81 @@ export const ModalPacient = () => {
               />
             </div>
             <div className="flex flex-col space-y-2">
-              <label htmlFor="nombre">Nombre</label>
+              <label htmlFor="name">Nombre</label>
               <input
                 type="text"
-                {...register("nombre", { required: "El nombre es requerido" })}
+                {...register("name", { required: "El nombre es requerido" })}
                 className="p-2 border border-gray-300 rounded-md"
               />
             </div>
             <div className="flex flex-col space-y-2">
-              <label htmlFor="apellido">Apellido</label>
+              <label htmlFor="lastname">Apellido</label>
               <input
                 type="text"
-                {...register("apellido", {
+                {...register("lastname", {
                   required: "El apellido es requerido",
                 })}
                 className="p-2 border border-gray-300 rounded-md"
               />
             </div>
             <div className="flex flex-col space-y-2">
-              <label htmlFor="direccion">Direccion</label>
+              <label htmlFor="address">Direccion</label>
               <input
-                type="text"
-                {...register("direccion", {
+                type="email"
+                {...register("address", {
                   required: "La direccion es requerida",
                 })}
                 className="p-2 border border-gray-300 rounded-md"
               />
             </div>
             <div className="flex flex-col space-y-2">
-              <label htmlFor="telefono">Telefono</label>
+              <label htmlFor="phone">Telefono</label>
               <input
                 type="text"
-                {...register("telefono", {
+                {...register("phone", {
                   required: "El telefono es requerido",
                 })}
                 className="p-2 border border-gray-300 rounded-md"
               />
             </div>
             <div className="flex flex-col space-y-2">
-              <label htmlFor="fechaNacimiento">Fecha de Nacimiento</label>
+              <label htmlFor="birthdate">Fecha de Nacimiento</label>
               <input
                 type="date"
-                {...register("fechaNacimiento", {
+                {...register("birthdate", {
                   required: "La fecha de nacimiento es requerida",
                 })}
                 className="p-2 border border-gray-300 rounded-md"
               />
             </div>
             <div className="flex flex-col space-y-2">
-              <label htmlFor="sexo">Sexo</label>
-              <input
-                type="text"
-                {...register("sexo", { required: "El sexo es requerido" })}
-                className="p-2 border border-gray-300 rounded-md"
-              />
+              <label htmlFor="gender">Sexo</label>
+              <div className="flex flex-col space-y-2">
+                <label htmlFor="male">
+                  <input
+                    type="radio"
+                    id="male"
+                    value="MASCULINO"
+                    className="w-fit mr-2"
+                    {...register("gender", {
+                      required: "El sexo es requerido",
+                    })}
+                  />
+                  Masculino
+                </label>
+                <label htmlFor="female">
+                  <input
+                    type="radio"
+                    id="female"
+                    value="FEMENINO"
+                    className="w-fit mr-2"
+                    {...register("gender", {
+                      required: "El sexo es requerido",
+                    })}
+                  />
+                  Femenino
+                </label>
+              </div>
             </div>
             <div className="flex justify-end space-x-4">
               <button

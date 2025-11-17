@@ -5,10 +5,10 @@ import { toast } from "sonner";
 
 export const useMostrarPacientesQuery = () => {
   const { mostrarPacientes } = usePacientStore();
-  const { user } = useAuthStore();
+  const { token } = useAuthStore();
   return useQuery({
     queryKey: ["mostrarPacientes"],
-    queryFn: () => mostrarPacientes(user.accessToken),
+    queryFn: () => mostrarPacientes(token),
     onSuccess: () => {
       toast.success("Pacientes Cargados correctamente");
     },
@@ -19,11 +19,11 @@ export const useMostrarPacientesQuery = () => {
 };
 
 export const useAgregarPacienteMutation = () => {
-  const { agregarPaciente } = usePacientStore();
+  const { agregarPaciente,setModalPacientState } = usePacientStore();
   const queryClient = useQueryClient();
-  const { user } = useAuthStore();
+  const { token } = useAuthStore();
   return useMutation({
-    mutationFn: (paciente) => agregarPaciente(paciente, user.accessToken),
+    mutationFn: (paciente) => agregarPaciente(paciente, token),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["mostrarPacientes"] });
       setModalPacientState(false);

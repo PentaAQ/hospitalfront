@@ -25,6 +25,7 @@ export const PacientPage = () => {
               <th className="p-2 text-center">Telefono</th>
               <th className="p-2 text-center">Fecha de Nacimiento</th>
               <th className="p-2 text-center">Sexo</th>
+              <th className="p-2 text-center">Estado</th>
               <th className="p-2 text-center">Acciones</th>
             </tr>
           </thead>

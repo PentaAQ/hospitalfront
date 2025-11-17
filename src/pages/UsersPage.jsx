@@ -25,6 +25,7 @@ export const UsersPage = () => {
                         <th>Apellido</th>
                         <th>DNI</th>
                         <th>Rol</th>
+                        <th>Estado</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>

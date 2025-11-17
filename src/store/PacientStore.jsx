@@ -1,4 +1,5 @@
 import { create } from "zustand";
+const baseURL = import.meta.env.VITE_BASE_URL;
 
 export const usePacientStore = create((set) => ({
   modalPacientState: false,
@@ -6,7 +7,7 @@ export const usePacientStore = create((set) => ({
 
   mostrarPacientes: async (token) => {
     const response = await fetch(
-      "https://3t0p4dvn-8080.brs.devtunnels.ms/api/patients",
+      `${baseURL}/api/patients`,
       {
         headers: {
           "Content-Type": "application/json",

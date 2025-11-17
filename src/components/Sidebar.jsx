@@ -1,6 +1,6 @@
 import { NavLink } from "react-router-dom";
 import { BtnLogout } from "./ui/BtnLogout";
-import { useObtenerUsuarioQuery } from "../stack/UserStack";
+import { useAuthStore } from "../store/AuthStore";
 
 export const Sidebar = () => {
   const links = [
@@ -33,15 +33,15 @@ export const Sidebar = () => {
       to: "/pacientes",
     },
   ];
+  const { user } = useAuthStore();
 
-  const { data: employee } = useObtenerUsuarioQuery();
   return (
     <div className="h-full bg-white border-r-2 border-gray-200 text-black flex flex-col gap-5 p-3">
       <div className="flex flex-col gap-2">
         <span className="text-2xl font-semibold">
-          Bienvenido, {employee?.nombre}{" "}
+          Bienvenido, {user?.name}{" "}
         </span>
-        <i className="text-sm text-gray-400">DNI: {employee?.dni}</i>
+        <i className="text-sm text-gray-400">DNI: {user?.dni}</i>
       </div>
       <div className="flex flex-col flex-1 gap-4">
         {links.map((item, index) => (

@@ -1,12 +1,10 @@
 import { useHistoryMedicStore } from "../store/HistoryMedic";
 import { useForm } from "react-hook-form";
-import { useObtenerUsuarioQuery } from "../stack/UserStack";
 import { useAgregarHistoriaMedicaMutation } from "../stack/HistoryMedicStack";
 
 export const ModalHistoryMedic = () => {
   const { setModalHistoryMedicState } = useHistoryMedicStore();
   const { register, handleSubmit } = useForm();
-  const { data: user } = useObtenerUsuarioQuery();
   const { mutate } = useAgregarHistoriaMedicaMutation();
   const onSubmit = (data) => {
     mutate(data);
