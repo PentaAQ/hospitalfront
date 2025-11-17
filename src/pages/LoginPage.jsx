@@ -72,9 +72,23 @@ export const LoginPage = () => {
           </div>
           <button
             type="submit"
-            className="bg-blue-500 hover:bg-blue-300 transition-colors duration-300 w-full text-white p-2 rounded-lg "
+            disabled={isLoading}
+            className={`bg-blue-500 transition-colors duration-300 w-full text-white p-2 rounded-lg ${
+              isLoading ? "opacity-70 cursor-not-allowed" : "hover:bg-blue-300"
+            }`}
           >
-            {isLoading ? "Cargando..." : "Iniciar Sesion"}
+            {isLoading ? (
+              <span className="flex items-center justify-center gap-2">
+                <Icon
+                  icon="line-md:loading-twotone-loop"
+                  width="20"
+                  height="20"
+                />
+                Cargando...
+              </span>
+            ) : (
+              "Iniciar Sesion"
+            )}
           </button>
         </form>
       </div>

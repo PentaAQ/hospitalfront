@@ -34,3 +34,13 @@ export const useAgregarPacienteMutation = () => {
     },
   });
 };
+
+export const useObtenerPacientePorDNIQuery = (dni) => {
+  const { obtenerPacientePorDNI } = usePacientStore();
+  const { token } = useAuthStore();
+  return useQuery({
+    queryKey: ["obtenerPacientePorDNI", dni],
+    queryFn: () => obtenerPacientePorDNI(dni, token),
+    enabled: !!dni,
+  });
+};

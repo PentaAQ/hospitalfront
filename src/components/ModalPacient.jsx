@@ -9,117 +9,131 @@ export const ModalPacient = () => {
   const { mutate } = useAgregarPacienteMutation();
 
   const onSubmit = (data) => {
-    console.log(data);
     mutate(data);
   };
   return (
     <div>
       <div
-        className="inset-0 fixed bg-black/80 flex items-center justify-center"
+        className="fixed inset-0 bg-black/60 flex items-center justify-center"
         onClick={() => setModalPacientState(false)}
       ></div>
-      <div className="w-full max-w-[500px] bg-white rounded-lg absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-        <div className="p-4">
-          <h1 className="text-2xl font-semibold mb-4">Agregar Paciente</h1>
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-            <div className="flex flex-col space-y-2">
-              <label htmlFor="dni">DNI</label>
-              <input
-                type="text"
-                {...register("dni", { required: "El dni es requerido" })}
-                className="p-2 border border-gray-300 rounded-md"
-              />
+      <div className="fixed inset-0 flex items-center justify-center pointer-events-none">
+        <div className="w-full max-w-xl bg-white rounded-2xl shadow-xl border border-slate-100 pointer-events-auto">
+          <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
+            <h1 className="text-xl font-semibold text-slate-900">Agregar paciente</h1>
+            <button
+              type="button"
+              onClick={() => setModalPacientState(false)}
+              className="text-slate-400 hover:text-slate-600 text-sm"
+            >
+              Cerrar
+            </button>
+          </div>
+          <form onSubmit={handleSubmit(onSubmit)} className="px-6 py-4 space-y-4 max-h-[70vh] overflow-y-auto">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="flex flex-col gap-1">
+                <label htmlFor="dni" className="text-sm font-medium text-slate-700">DNI</label>
+                <input
+                  type="text"
+                  id="dni"
+                  {...register("dni", { required: "El DNI es requerido" })}
+                  className="p-2.5 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500"
+                />
+              </div>
+              <div className="flex flex-col gap-1">
+                <label htmlFor="name" className="text-sm font-medium text-slate-700">Nombre</label>
+                <input
+                  type="text"
+                  id="name"
+                  {...register("name", { required: "El nombre es requerido" })}
+                  className="p-2.5 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500"
+                />
+              </div>
+              <div className="flex flex-col gap-1">
+                <label htmlFor="lastname" className="text-sm font-medium text-slate-700">Apellido</label>
+                <input
+                  type="text"
+                  id="lastname"
+                  {...register("lastname", {
+                    required: "El apellido es requerido",
+                  })}
+                  className="p-2.5 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500"
+                />
+              </div>
+              <div className="flex flex-col gap-1">
+                <label htmlFor="address" className="text-sm font-medium text-slate-700">Dirección</label>
+                <input
+                  type="text"
+                  id="address"
+                  {...register("address", {
+                    required: "La dirección es requerida",
+                  })}
+                  className="p-2.5 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500"
+                />
+              </div>
+              <div className="flex flex-col gap-1">
+                <label htmlFor="phone" className="text-sm font-medium text-slate-700">Teléfono</label>
+                <input
+                  type="text"
+                  id="phone"
+                  {...register("phone", {
+                    required: "El teléfono es requerido",
+                  })}
+                  className="p-2.5 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500"
+                />
+              </div>
+              <div className="flex flex-col gap-1">
+                <label htmlFor="birthdate" className="text-sm font-medium text-slate-700">Fecha de nacimiento</label>
+                <input
+                  type="date"
+                  id="birthdate"
+                  {...register("birthdate", {
+                    required: "La fecha de nacimiento es requerida",
+                  })}
+                  className="p-2.5 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500"
+                />
+              </div>
             </div>
-            <div className="flex flex-col space-y-2">
-              <label htmlFor="name">Nombre</label>
-              <input
-                type="text"
-                {...register("name", { required: "El nombre es requerido" })}
-                className="p-2 border border-gray-300 rounded-md"
-              />
-            </div>
-            <div className="flex flex-col space-y-2">
-              <label htmlFor="lastname">Apellido</label>
-              <input
-                type="text"
-                {...register("lastname", {
-                  required: "El apellido es requerido",
-                })}
-                className="p-2 border border-gray-300 rounded-md"
-              />
-            </div>
-            <div className="flex flex-col space-y-2">
-              <label htmlFor="address">Direccion</label>
-              <input
-                type="email"
-                {...register("address", {
-                  required: "La direccion es requerida",
-                })}
-                className="p-2 border border-gray-300 rounded-md"
-              />
-            </div>
-            <div className="flex flex-col space-y-2">
-              <label htmlFor="phone">Telefono</label>
-              <input
-                type="text"
-                {...register("phone", {
-                  required: "El telefono es requerido",
-                })}
-                className="p-2 border border-gray-300 rounded-md"
-              />
-            </div>
-            <div className="flex flex-col space-y-2">
-              <label htmlFor="birthdate">Fecha de Nacimiento</label>
-              <input
-                type="date"
-                {...register("birthdate", {
-                  required: "La fecha de nacimiento es requerida",
-                })}
-                className="p-2 border border-gray-300 rounded-md"
-              />
-            </div>
-            <div className="flex flex-col space-y-2">
-              <label htmlFor="gender">Sexo</label>
-              <div className="flex flex-col space-y-2">
-                <label htmlFor="male">
+            <div className="flex flex-col gap-2">
+              <span className="text-sm font-medium text-slate-700">Sexo</span>
+              <div className="flex gap-4 text-sm">
+                <label className="inline-flex items-center gap-2">
                   <input
                     type="radio"
-                    id="male"
                     value="MASCULINO"
-                    className="w-fit mr-2"
+                    className="h-4 w-4 text-cyan-600 border-slate-300"
                     {...register("gender", {
                       required: "El sexo es requerido",
                     })}
                   />
-                  Masculino
+                  <span>Masculino</span>
                 </label>
-                <label htmlFor="female">
+                <label className="inline-flex items-center gap-2">
                   <input
                     type="radio"
-                    id="female"
                     value="FEMENINO"
-                    className="w-fit mr-2"
+                    className="h-4 w-4 text-cyan-600 border-slate-300"
                     {...register("gender", {
                       required: "El sexo es requerido",
                     })}
                   />
-                  Femenino
+                  <span>Femenino</span>
                 </label>
               </div>
             </div>
-            <div className="flex justify-end space-x-4">
-              <button
-                type="submit"
-                className="bg-cyan-500 text-white px-4 py-2 rounded-md"
-              >
-                Agregar
-              </button>
+            <div className="flex justify-end gap-3 pt-2">
               <button
                 type="button"
                 onClick={() => setModalPacientState(false)}
-                className="bg-gray-200 text-gray-700 px-4 py-2 rounded-md"
+                className="px-4 py-2 text-sm font-medium text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors"
               >
                 Cancelar
+              </button>
+              <button
+                type="submit"
+                className="px-4 py-2 text-sm font-medium text-white bg-cyan-600 hover:bg-cyan-700 rounded-lg transition-colors"
+              >
+                Guardar paciente
               </button>
             </div>
           </form>

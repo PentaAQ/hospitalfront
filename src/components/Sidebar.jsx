@@ -17,11 +17,11 @@ export const Sidebar = () => {
       to: "/users",
     },
     {
-      name: "Citas Medicas",
+      name: "Citas Médicas",
       to: "/citas",
     },
     {
-      name: "Historias Medicas",
+      name: "Historias Médicas",
       to: "/historias",
     },
     {
@@ -36,14 +36,17 @@ export const Sidebar = () => {
   const { user } = useAuthStore();
 
   return (
-    <div className="h-full bg-white border-r-2 border-gray-200 text-black flex flex-col gap-5 p-3">
-      <div className="flex flex-col gap-2">
-        <span className="text-2xl font-semibold">
-          Bienvenido, {user?.name}{" "}
+    <div className="h-full bg-white text-slate-900 flex flex-col gap-6 p-4">
+      <div className="flex flex-col gap-1 pb-4 border-b border-slate-200">
+        <span className="text-xs font-semibold tracking-wide text-cyan-600 uppercase">
+          Hospital Santa Catalina
         </span>
-        <i className="text-sm text-gray-400">DNI: {user?.dni}</i>
+        <span className="text-xl font-semibold">
+          Hola, {user?.name}
+        </span>
+        <span className="text-xs text-slate-400">DNI: {user?.dni}</span>
       </div>
-      <div className="flex flex-col flex-1 gap-4">
+      <nav className="flex flex-col flex-1 gap-2">
         {links.map((item, index) => (
           <NavLink
             key={index}
@@ -51,16 +54,18 @@ export const Sidebar = () => {
             className={({ isActive }) =>
               `${
                 isActive
-                  ? "bg-cyan-200 text-cyan-600 hover:text-cyan-600"
-                  : "hover:bg-cyan-100 hover:text-cyan-600"
-              } text-center p-2 rounded-md text-neutral-800 font-medium transition-colors duration-300 ease-in-out`
+                  ? "bg-cyan-50 text-cyan-700 border border-cyan-100"
+                  : "text-slate-700 hover:bg-slate-50 hover:text-cyan-700 border border-transparent"
+              } flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium transition-colors duration-200`
             }
           >
-            {item.name}
+            <span>{item.name}</span>
           </NavLink>
         ))}
+      </nav>
+      <div className="pt-2 border-t border-slate-200">
+        <BtnLogout />
       </div>
-      <BtnLogout />
     </div>
   );
 };

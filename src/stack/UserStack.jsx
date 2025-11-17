@@ -20,11 +20,11 @@ export const useMostrarUsuariosQuery = () => {
 
 export const useAgregarUsuariosMutation = () => {
   const { agregarUsuario } = useUserStore();
-  const { user } = useAuthStore();
+  const { token } = useAuthStore();
   const queryClient = useQueryClient();
   const { setModalUserState } = useUserStore();
   return useMutation({
-    mutationFn: (newUser) => agregarUsuario(newUser, user.accessToken),
+    mutationFn: (newUser) => agregarUsuario(newUser, token),
     onSuccess: (data) => {
       console.log(data);
       queryClient.invalidateQueries({ queryKey: ["mostrarUsuarios"] });

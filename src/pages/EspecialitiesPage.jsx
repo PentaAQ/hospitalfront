@@ -8,31 +8,39 @@ export const EspecialitiesPage = () => {
   const { modalEspecilities } = useEspecilitiesStore();
   const { data } = useMostrarEspecilitiesQuery();
   return (
-    <section className="h-screen bg-white text-black">
+    <section className="h-full flex flex-col">
       {modalEspecilities && <ModalEspecialities />}
-      <header className="flex justify-between items-center p-4 border-b-2 border-gray-300">
-        <h1 className="text-2xl font-semibold">Especialidades</h1>
+      <header className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between border-b border-slate-200 pb-4 mb-4">
+        <div>
+          <h1 className="text-2xl font-semibold text-slate-900">Especialidades</h1>
+          <p className="text-sm text-slate-500">
+            Administra las especialidades médicas disponibles en el hospital.
+          </p>
+        </div>
         <BtnAddEspecilities />
       </header>
-      <main className="p-4">
-        <table className="w-full">
-          <thead>
-            <tr>
-              <th>Nombre</th>
-              <th>Descripcion</th>
-              <th>Costo/Hora</th>
-              <th>Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            {data?.map((especialidad) => (
-              <RowTableEspecialities
-                key={especialidad.id}
-                especialidad={especialidad}
-              />
-            ))}
-          </tbody>
-        </table>
+      <main className="flex-1 overflow-auto">
+        <div className="w-full overflow-x-auto rounded-xl border border-slate-200 bg-white">
+          <table className="w-full text-sm border-collapse">
+            <thead className="bg-slate-50 text-slate-600">
+              <tr>
+                <th className="px-4 py-3 text-left">Nombre</th>
+                <th className="px-4 py-3 text-left">Descripción</th>
+                <th className="px-4 py-3 text-left">Costo / hora</th>
+                <th className="px-4 py-3 text-left">Estado</th>
+                <th className="px-4 py-3 text-right">Acciones</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-100">
+              {data?.map((especialidad) => (
+                <RowTableEspecialities
+                  key={especialidad.id}
+                  especialidad={especialidad}
+                />
+              ))}
+            </tbody>
+          </table>
+        </div>
       </main>
     </section>
   );

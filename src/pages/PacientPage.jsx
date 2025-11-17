@@ -8,33 +8,40 @@ export const PacientPage = () => {
   const { modalPacientState } = usePacientStore();
   const { data: pacientes } = useMostrarPacientesQuery();
   return (
-    <section>
+    <section className="h-full flex flex-col">
       {modalPacientState && <ModalPacient />}
-      <header className="flex justify-between items-center p-4 border-b-2 border-gray-300">
-        <h1 className="text-2xl font-semibold">Lista de Pacientes</h1>
+      <header className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between border-b border-slate-200 pb-4 mb-4">
+        <div>
+          <h1 className="text-2xl font-semibold text-slate-900">Pacientes</h1>
+          <p className="text-sm text-slate-500">
+            Gestiona la lista de pacientes registrados en el hospital.
+          </p>
+        </div>
         <BtnAddPacient />
       </header>
-      <main className="p-4">
-        <table>
-          <thead>
-            <tr>
-              <th className="p-2 text-center">DNI</th>
-              <th className="p-2 text-center">Nombre</th>
-              <th className="p-2 text-center">Apellido</th>
-              <th className="p-2 text-center">Direccion</th>
-              <th className="p-2 text-center">Telefono</th>
-              <th className="p-2 text-center">Fecha de Nacimiento</th>
-              <th className="p-2 text-center">Sexo</th>
-              <th className="p-2 text-center">Estado</th>
-              <th className="p-2 text-center">Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            {pacientes?.map((paciente) => (
-              <RowTablePacients key={paciente.dni} paciente={paciente} />
-            ))}
-          </tbody>
-        </table>
+      <main className="flex-1 overflow-auto">
+        <div className="w-full overflow-x-auto rounded-xl border border-slate-200 bg-white">
+          <table className="w-full text-sm border-collapse">
+            <thead className="bg-slate-50 text-slate-600">
+              <tr>
+                <th className="px-4 py-3 text-left">DNI</th>
+                <th className="px-4 py-3 text-left">Nombre</th>
+                <th className="px-4 py-3 text-left">Apellido</th>
+                <th className="px-4 py-3 text-left">Dirección</th>
+                <th className="px-4 py-3 text-left">Teléfono</th>
+                <th className="px-4 py-3 text-left">Fecha de nacimiento</th>
+                <th className="px-4 py-3 text-left">Sexo</th>
+                <th className="px-4 py-3 text-center">Estado</th>
+                <th className="px-4 py-3 text-right">Acciones</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-100">
+              {pacientes?.map((paciente) => (
+                <RowTablePacients key={paciente.dni} paciente={paciente} />
+              ))}
+            </tbody>
+          </table>
+        </div>
       </main>
     </section>
   );

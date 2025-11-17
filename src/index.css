@@ -12,3 +12,11 @@
 html{
   font-family: 'Poppins', sans-serif;
 }
+
+body{
+  @apply bg-slate-50 text-slate-900 antialiased;
+}
+
+main{
+  @apply min-h-screen;
+}

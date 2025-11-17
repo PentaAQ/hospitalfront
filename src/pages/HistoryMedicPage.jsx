@@ -8,35 +8,41 @@ export const HistoryMedicPage = () => {
   const { modalHistoryMedicState } = useHistoryMedicStore();
   const { data } = useMostrarHistoriasMedicasQuery();
 
-  
   return (
-    <section>
+    <section className="h-full flex flex-col">
       {modalHistoryMedicState && <ModalHistoryMedic />}
-      <header className="flex justify-between items-center p-4 border-b-2 border-gray-300">
-        <h1 className="text-2xl font-semibold">Historias Medicas</h1>
+      <header className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between border-b border-slate-200 pb-4 mb-4">
+        <div>
+          <h1 className="text-2xl font-semibold text-slate-900">Historias médicas</h1>
+          <p className="text-sm text-slate-500">
+            Registra y consulta la información clínica de los pacientes.
+          </p>
+        </div>
         <BtnAddHistoryMedic />
       </header>
-      <main>
-        <table>
-          <thead>
-            <tr>
-              <th className="p-2 text-center">ID</th>
-              <th className="p-2 text-center">DNI del Paciente</th>
-              <th className="p-2 text-center">Estado</th>
-              <th className="p-2 text-center">Fecha de Creacion</th>
-              <th className="p-2 text-center">Fecha de Actualizacion</th>
-              <th className="p-2 text-center">Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            {data?.map((historiaMedica) => (
-              <RowTableHistoryMedic
-                key={historiaMedica.id}
-                historiaMedica={historiaMedica}
-              />
-            ))}
-          </tbody>
-        </table>
+      <main className="flex-1 overflow-auto">
+        <div className="w-full overflow-x-auto rounded-xl border border-slate-200 bg-white">
+          <table className="w-full text-sm border-collapse">
+            <thead className="bg-slate-50 text-slate-600">
+              <tr>
+                <th className="px-4 py-3 text-left">ID</th>
+                <th className="px-4 py-3 text-left">DNI del paciente</th>
+                <th className="px-4 py-3 text-center">Estado</th>
+                <th className="px-4 py-3 text-left">Fecha de creación</th>
+                <th className="px-4 py-3 text-left">Fecha de actualización</th>
+                <th className="px-4 py-3 text-right">Acciones</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-100">
+              {data?.map((historiaMedica) => (
+                <RowTableHistoryMedic
+                  key={historiaMedica.id}
+                  historiaMedica={historiaMedica}
+                />
+              ))}
+            </tbody>
+          </table>
+        </div>
       </main>
     </section>
   );

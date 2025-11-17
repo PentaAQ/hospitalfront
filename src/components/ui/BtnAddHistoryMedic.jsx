@@ -4,11 +4,11 @@ export const BtnAddHistoryMedic = () => {
   const { setModalHistoryMedicState } = useHistoryMedicStore();
   return (
     <button
-      className="h-fit w-fitt py-2 rounded-lg bg-cyan-500 text-white hover:bg-cyan-600 transition-colors duration-300 ease-in-out cursor-pointer px-2 flex items-center gap-2 font-medium"
+      className="h-fit w-fit py-2 px-3 rounded-lg bg-cyan-600 text-white hover:bg-cyan-700 transition-colors duration-200 cursor-pointer flex items-center gap-2 text-sm font-medium"
       onClick={() => setModalHistoryMedicState(true)}
     >
       <Icon icon="fluent-mdl2:circle-addition" width="20" height="20" />
-      <span>Agregar Historia Medicas</span>
+      <span>Agregar historia médica</span>
     </button>
   );
 };

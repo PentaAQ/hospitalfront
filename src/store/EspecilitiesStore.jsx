@@ -32,6 +32,58 @@ export const useEspecilitiesStore = create((set) => ({
     return data;
   },
 
+  desabilitarEspecilities: async (id, token) => {
+    const response = await fetch(`${baseURL}/api/specialties/disable/${id}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    let data = null;
+    const text = await response.text();
+
+    if (text) {
+      try {
+        data = JSON.parse(text);
+      } catch (e) {
+        // si no es JSON válido, dejamos data en null
+      }
+    }
+
+    if (!response.ok) {
+      throw new Error((data && data.message) || `Error ${response.status}`);
+    }
+
+    return data;
+  },
+
+  habilitarEspecilities: async (id, token) => {
+    const response = await fetch(`${baseURL}/api/specialties/enable/${id}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    let data = null;
+    const text = await response.text();
+
+    if (text) {
+      try {
+        data = JSON.parse(text);
+      } catch (e) {
+        // si no es JSON válido, dejamos data en null
+      }
+    }
+
+    if (!response.ok) {
+      throw new Error((data && data.message) || `Error ${response.status}`);
+    }
+
+    return data;
+  },
+
   modalEspecilities: false,
   setModalEspecilities: (modal) => set({ modalEspecilities: modal }),
 }));

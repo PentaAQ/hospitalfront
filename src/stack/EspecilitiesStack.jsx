@@ -36,3 +36,36 @@ export const useAgregarEspecilitiesMutation = () => {
      },
    });
  };
+
+export const useDesabilitarEspecilitiesMutation = () => {
+  const queryClient = useQueryClient();
+  const { desabilitarEspecilities } = useEspecilitiesStore();
+  const { token } = useAuthStore();
+  return useMutation({
+    mutationFn: (id) => desabilitarEspecilities(id, token),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["mostrarEspecilities"] });
+      toast.warning("Especialidad deshabilitada correctamente");
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
+};
+
+
+export const useHabilitarEspecilitiesMutation = () => {
+  const queryClient = useQueryClient();
+  const { habilitarEspecilities } = useEspecilitiesStore();
+  const { token } = useAuthStore();
+  return useMutation({
+    mutationFn: (id) => habilitarEspecilities(id, token),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["mostrarEspecilities"] });
+      toast.success("Especialidad habilitada correctamente");
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
+};
