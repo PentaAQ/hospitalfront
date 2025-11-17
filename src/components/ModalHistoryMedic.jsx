@@ -146,14 +146,26 @@ export const ModalHistoryMedic = () => {
             <Controller
               name="patientId"
               control={control}
-              render={({ field }) => <input type="hidden" {...field} />}
+              render={({ field }) => (
+                <input
+                  type="hidden"
+                  {...field}
+                  value={field.value ?? ""}
+                />
+              )}
             />
 
             {/* Campo oculto para el DNI del empleado */}
             <Controller
               name="employeeDni"
               control={control}
-              render={({ field }) => <input type="hidden" {...field} />}
+              render={({ field }) => (
+                <input
+                  type="hidden"
+                  {...field}
+                  value={field.value ?? ""}
+                />
+              )}
             />
 
             <div className="flex flex-col gap-1">
@@ -185,6 +197,7 @@ export const ModalHistoryMedic = () => {
                       placeholder="Ej: 1.75"
                       className="p-2.5 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500"
                       {...field}
+                      value={field.value ?? ""}
                     />
                   )}
                 />
@@ -204,6 +217,7 @@ export const ModalHistoryMedic = () => {
                       placeholder="Ej: 70.5"
                       className="p-2.5 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500"
                       {...field}
+                      value={field.value ?? ""}
                     />
                   )}
                 />

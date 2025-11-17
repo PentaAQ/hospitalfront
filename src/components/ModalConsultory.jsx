@@ -112,7 +112,7 @@ export const ModalConsultory = () => {
                 />
               </div>
             </div>
-            <div className="flex flex-col gap-1">
+            <div className="flex-col gap-1 hidden">
               <label className="text-sm font-medium text-slate-700">
                 Estado
               </label>

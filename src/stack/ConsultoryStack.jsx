@@ -18,17 +18,20 @@ export const useObtenerConsultoriosQuery = () => {
 };
 
 export const useAgregarConsultorioMutation = () => {
-    const { agregarConsultorio } = useConsultoryStore();
+    const { setModalConsultoryState ,agregarConsultorio } = useConsultoryStore();
     const { token } = useAuthStore();
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: (consultorio) => agregarConsultorio(token, consultorio),
         onSuccess: (data) => {
             console.log(data);
+            setModalConsultoryState(false);
             queryClient.invalidateQueries({ queryKey: ["obtenerConsultorios"] });
+            toast.success("Consultorio agregado correctamente");
         },
         onError: (error) => {
             console.log(error);
+            toast.error(error.message);
         },
     });
 };
