@@ -32,6 +32,10 @@ export const Sidebar = () => {
       name: "Pacientes",
       to: "/pacientes",
     },
+    {
+      name: "Consultorios",
+      to: "/consultorios",
+    },
   ];
   const { user } = useAuthStore();
 

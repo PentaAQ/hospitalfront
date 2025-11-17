@@ -8,6 +8,7 @@ import { HoraryPage } from "../pages/HoraryPage";
 import { UsersPage } from "../pages/UsersPage";
 import { HistoryMedicPage } from "../pages/HistoryMedicPage";
 import { PacientPage } from "../pages/PacientPage";
+import { ConsultoryPage } from "../pages/ConsultoryPage";
 
 export const MyRoutes = () => (
   <BrowserRouter>
@@ -35,6 +36,7 @@ export const MyRoutes = () => (
         <Route path="/users" element={<UsersPage />} />
         <Route path="/historias" element={<HistoryMedicPage />} />
         <Route path="/pacientes" element={<PacientPage />} />
+        <Route path="/consultorios" element={<ConsultoryPage />} />
       </Route>
     </Routes>
   </BrowserRouter>
