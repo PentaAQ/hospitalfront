@@ -1,6 +1,6 @@
 import { useHoraryStore } from "../store/HoraryStore";
 import { useAuthStore } from "../store/AuthStore";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
 export const useAgregarHorarioMutation = () => {
@@ -17,5 +17,14 @@ export const useAgregarHorarioMutation = () => {
         onError: (error) => {
             toast.error(error.message);
         },
+    });
+};
+
+export const useObtenerTodosLosHorariosQuery = () => {
+    const { obtenerTodosLosHorarios } = useHoraryStore();
+    const { token } = useAuthStore();
+    return useQuery({
+        queryKey: ["mostrarHorarios"],
+        queryFn: () => obtenerTodosLosHorarios(token),
     });
 };

@@ -1,10 +1,11 @@
-import { useState, useRef } from 'react';
+import { useState, useRef } from "react";
 import { useForm } from "react-hook-form";
-import { useObtenerConsultoriosQuery } from '../stack/ConsultoryStack';
-import { useAuthStore } from '../store/AuthStore';
-import { useHoraryStore } from '../store/HoraryStore';
-import { useMostrarEspecilitiesQuery } from '../stack/EspecilitiesStack';
-import { useObtenerTodosLosDoctoresQuery } from '../stack/DoctorStack';
+import { useObtenerConsultoriosQuery } from "../stack/ConsultoryStack";
+import { useAuthStore } from "../store/AuthStore";
+import { useHoraryStore } from "../store/HoraryStore";
+import { useMostrarEspecilitiesQuery } from "../stack/EspecilitiesStack";
+import { useObtenerTodosLosDoctoresQuery } from "../stack/DoctorStack";
+import { useAgregarHorarioMutation } from "../stack/HoraryStack";
 
 // Datos ficticios
 // const specialties = [
@@ -38,7 +39,9 @@ const generateTimeSlots = () => {
   const slots = [];
   for (let hour = 8; hour < 20; hour++) {
     for (let min = 0; min < 60; min += 20) {
-      const time = `${hour.toString().padStart(2, '0')}:${min.toString().padStart(2, '0')}`;
+      const time = `${hour.toString().padStart(2, "0")}:${min
+        .toString()
+        .padStart(2, "0")}`;
       slots.push(time);
     }
   }
@@ -48,7 +51,6 @@ const generateTimeSlots = () => {
 const timeSlots = generateTimeSlots();
 
 export const ModalHorary = () => {
-
   const { user } = useAuthStore();
   const { register, handleSubmit, setValue, watch } = useForm({
     defaultValues: {
@@ -62,31 +64,36 @@ export const ModalHorary = () => {
       status: true,
     },
   });
-  
-  const {data: specialties} = useMostrarEspecilitiesQuery();
-  const {data:doctors} = useObtenerTodosLosDoctoresQuery();
-  const {data:offices} = useObtenerConsultoriosQuery();
-  const {setModalHoraryState} = useHoraryStore();
+  const { mutate: agregarHorario } = useAgregarHorarioMutation();
+
+  const { data: specialties } = useMostrarEspecilitiesQuery();
+  const { data: doctors } = useObtenerTodosLosDoctoresQuery();
+  const { data: offices } = useObtenerConsultoriosQuery();
+  const { setModalHoraryState } = useHoraryStore();
   const [selectedSpecialty, setSelectedSpecialty] = useState(null);
   const [selectedDoctor, setSelectedDoctor] = useState(null);
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
-  
+
   const modalRef = useRef(null);
-  
+
   // Filtrar doctores por especialidad
   const availableDoctors = selectedSpecialty
-    ? doctors?.filter(doc => doc?.specialties?.[0]?.id === selectedSpecialty.id)
+    ? doctors?.filter(
+        (doc) => doc?.specialties?.[0]?.id === selectedSpecialty.id
+      )
     : [];
 
   // Filtrar consultorios por especialidad
   const availableOffices = selectedSpecialty
-    ? offices.filter(office => office.specialtyIds.includes(selectedSpecialty.id))
+    ? offices.filter((office) =>
+        office.specialtyIds.includes(selectedSpecialty.id)
+      )
     : [];
 
   // Generar horarios finales basados en el inicio
   const endTimeSlots = startTime
-    ? timeSlots.filter(slot => slot > startTime)
+    ? timeSlots.filter((slot) => slot > startTime)
     : [];
 
   const handleSelectSpecialty = (specialty) => {
@@ -120,7 +127,14 @@ export const ModalHorary = () => {
 
   const onSubmit = (data) => {
     // Validar que todos los campos requeridos estén presentes
-    if (!data.doctorDni || !data.specialtyId || !data.officeId || !data.date || !data.startTime || !data.endTime) {
+    if (
+      !data.doctorDni ||
+      !data.specialtyId ||
+      !data.officeId ||
+      !data.date ||
+      !data.startTime ||
+      !data.endTime
+    ) {
       alert("Por favor complete todos los campos requeridos");
       return;
     }
@@ -133,13 +147,12 @@ export const ModalHorary = () => {
       date: data.date,
       startTime: data.startTime,
       endTime: data.endTime,
-      status: data.status ?? true
+      status: data.status ?? true,
     };
-    
-    console.log(formattedData);
-    // setModalHoraryState(false);
-  };
 
+    console.log(formattedData);
+    agregarHorario(formattedData);
+  };
 
   return (
     <div>
@@ -148,13 +161,15 @@ export const ModalHorary = () => {
         onClick={() => setModalHoraryState(false)}
       ></div>
       <div className="fixed inset-0 flex items-center justify-center pointer-events-none z-50">
-        <div 
+        <div
           ref={modalRef}
           className="w-full max-w-3xl bg-white rounded-2xl shadow-xl border border-slate-100 pointer-events-auto max-h-[90vh] flex flex-col"
         >
           {/* Header */}
           <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between shrink-0">
-            <h1 className="text-xl font-semibold text-slate-900">Crear horario médico</h1>
+            <h1 className="text-xl font-semibold text-slate-900">
+              Crear horario médico
+            </h1>
             <button
               type="button"
               onClick={() => setModalHoraryState(false)}
@@ -163,13 +178,15 @@ export const ModalHorary = () => {
               Cerrar
             </button>
           </div>
-          
+
           {/* Content */}
           <div className="px-6 py-4 space-y-5 overflow-y-auto flex-1">
             {/* Paso 1: Seleccionar Especialidad */}
             <div className="space-y-2">
               <label className="text-sm font-semibold text-slate-700 flex items-center gap-2">
-                <span className="flex items-center justify-center w-6 h-6 rounded-full bg-cyan-600 text-white text-xs">1</span>
+                <span className="flex items-center justify-center w-6 h-6 rounded-full bg-cyan-600 text-white text-xs">
+                  1
+                </span>
                 Seleccione la especialidad
               </label>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
@@ -180,8 +197,8 @@ export const ModalHorary = () => {
                     onClick={() => handleSelectSpecialty(specialty)}
                     className={`p-3 rounded-lg border-2 text-sm font-medium transition-all ${
                       selectedSpecialty?.id === specialty.id
-                        ? 'border-cyan-600 bg-cyan-50 text-cyan-700'
-                        : 'border-slate-200 bg-white text-slate-700 hover:border-cyan-300'
+                        ? "border-cyan-600 bg-cyan-50 text-cyan-700"
+                        : "border-slate-200 bg-white text-slate-700 hover:border-cyan-300"
                     }`}
                   >
                     {specialty.name}
@@ -194,7 +211,9 @@ export const ModalHorary = () => {
             {selectedSpecialty && (
               <div className="space-y-2 animate-fadeIn">
                 <label className="text-sm font-semibold text-slate-700 flex items-center gap-2">
-                  <span className="flex items-center justify-center w-6 h-6 rounded-full bg-cyan-600 text-white text-xs">2</span>
+                  <span className="flex items-center justify-center w-6 h-6 rounded-full bg-cyan-600 text-white text-xs">
+                    2
+                  </span>
                   Seleccione el doctor
                 </label>
                 {availableDoctors?.length > 0 ? (
@@ -206,12 +225,16 @@ export const ModalHorary = () => {
                         onClick={() => handleSelectDoctor(doctor)}
                         className={`p-3 rounded-lg border-2 text-left text-sm transition-all ${
                           selectedDoctor?.dni === doctor.dni
-                            ? 'border-cyan-600 bg-cyan-50'
-                            : 'border-slate-200 bg-white hover:border-cyan-300'
+                            ? "border-cyan-600 bg-cyan-50"
+                            : "border-slate-200 bg-white hover:border-cyan-300"
                         }`}
                       >
-                        <p className="font-medium text-slate-900">{doctor.name}</p>
-                        <p className="text-xs text-slate-500">DNI: {doctor.dni}</p>
+                        <p className="font-medium text-slate-900">
+                          {doctor.name}
+                        </p>
+                        <p className="text-xs text-slate-500">
+                          DNI: {doctor.dni}
+                        </p>
                       </button>
                     ))}
                   </div>
@@ -227,14 +250,19 @@ export const ModalHorary = () => {
             {selectedDoctor && (
               <div className="space-y-4 animate-fadeIn">
                 <label className="text-sm font-semibold text-slate-700 flex items-center gap-2">
-                  <span className="flex items-center justify-center w-6 h-6 rounded-full bg-cyan-600 text-white text-xs">3</span>
+                  <span className="flex items-center justify-center w-6 h-6 rounded-full bg-cyan-600 text-white text-xs">
+                    3
+                  </span>
                   Fecha y horario
                 </label>
-                
+
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   {/* Fecha */}
                   <div className="flex flex-col gap-1">
-                    <label htmlFor="date" className="text-xs font-medium text-slate-600">
+                    <label
+                      htmlFor="date"
+                      className="text-xs font-medium text-slate-600"
+                    >
                       Fecha
                     </label>
                     <input
@@ -247,7 +275,10 @@ export const ModalHorary = () => {
 
                   {/* Hora Inicio */}
                   <div className="flex flex-col gap-1">
-                    <label htmlFor="startTime" className="text-xs font-medium text-slate-600">
+                    <label
+                      htmlFor="startTime"
+                      className="text-xs font-medium text-slate-600"
+                    >
                       Hora inicio
                     </label>
                     <select
@@ -267,7 +298,10 @@ export const ModalHorary = () => {
 
                   {/* Hora Fin */}
                   <div className="flex flex-col gap-1">
-                    <label htmlFor="endTime" className="text-xs font-medium text-slate-600">
+                    <label
+                      htmlFor="endTime"
+                      className="text-xs font-medium text-slate-600"
+                    >
                       Hora fin
                     </label>
                     <select
@@ -293,7 +327,9 @@ export const ModalHorary = () => {
             {selectedDoctor && startTime && endTime && (
               <div className="space-y-2 animate-fadeIn">
                 <label className="text-sm font-semibold text-slate-700 flex items-center gap-2">
-                  <span className="flex items-center justify-center w-6 h-6 rounded-full bg-cyan-600 text-white text-xs">4</span>
+                  <span className="flex items-center justify-center w-6 h-6 rounded-full bg-cyan-600 text-white text-xs">
+                    4
+                  </span>
                   Seleccione el consultorio
                 </label>
                 {availableOffices.length > 0 ? (
@@ -304,7 +340,9 @@ export const ModalHorary = () => {
                         type="button"
                         onClick={() => setValue("officeId", office.id)}
                         className={`p-3 rounded-lg border-2 text-sm font-medium transition-all ${
-                          office.id === watch("officeId") ? 'bg-cyan-50 border-cyan-500' : ''
+                          office.id === watch("officeId")
+                            ? "bg-cyan-50 border-cyan-500"
+                            : ""
                         }`}
                       >
                         {office.name}
@@ -323,7 +361,10 @@ export const ModalHorary = () => {
             <input type="hidden" {...register("employeeDni")} />
             <input type="hidden" {...register("specialtyId")} />
             <input type="hidden" {...register("doctorDni")} />
-            <input type="hidden" {...register("officeId", { required: true })} />
+            <input
+              type="hidden"
+              {...register("officeId", { required: true })}
+            />
             <input type="hidden" {...register("status")} />
           </div>
 
@@ -363,4 +404,4 @@ export const ModalHorary = () => {
       `}</style>
     </div>
   );
-}
+};

@@ -4,7 +4,7 @@ import { Sidebar } from "../components/Sidebar";
 
 export const LayoutAdmin = () => {
   return (
-    <div className="h-screen w-full bg-slate-50 flex">
+    <div className="h-screen w-full bg-slate-50 flex overflow-hidden">
       <section className="w-1/5 h-full border-r border-slate-200 bg-white">
         <Sidebar />
       </section>
