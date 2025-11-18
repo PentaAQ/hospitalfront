@@ -513,7 +513,7 @@ export const ModalAppointments = () => {
                   <div className="flex justify-between pt-2 border-t border-slate-300">
                     <span className="text-slate-600 font-semibold">Costo:</span>
                     <span className="font-bold text-lg text-green-700">
-                      S/ {selectedSchedule.specialty.cost}
+                      S/ {(selectedSchedule.specialty.cost).toFixed(2)}
                     </span>
                   </div>
                 </div>

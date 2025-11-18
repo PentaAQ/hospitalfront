@@ -533,7 +533,7 @@ export const AppointmentsPage = () => {
               return (
                 <div
                   key={index}
-                  className={`min-h-[140px] p-2 ${
+                  className={`h-[90px] overflow-y-auto p-2 ${
                     !day.isCurrentMonth ? "bg-slate-50" : "bg-white"
                   } hover:bg-slate-50 transition-colors`}
                 >
@@ -595,7 +595,7 @@ export const AppointmentsPage = () => {
       {/* Modal de detalles */}
       {selectedAppointment && (
         <div
-          className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50"
+          className="fixed inset-0 bg-gray-900/80 flex items-center justify-center p-4 z-50"
           onClick={() => setSelectedAppointment(null)}
         >
           <div

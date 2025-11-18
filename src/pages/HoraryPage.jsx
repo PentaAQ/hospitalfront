@@ -406,9 +406,9 @@ export const HoraryPage = () => {
                     <div className="text-sm text-slate-600">
                       {selectedSchedule.specialty.description}
                     </div>
-                    <div className="text-sm font-medium text-slate-900 mt-1">
+                    {/* <div className="text-sm font-medium text-slate-900 mt-1">
                       Costo: S/ {selectedSchedule.specialty.cost}
-                    </div>
+                    </div> */}
                   </div>
                 </div>
 

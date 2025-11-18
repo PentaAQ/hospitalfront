@@ -7,60 +7,40 @@ import { useMostrarEspecilitiesQuery } from "../stack/EspecilitiesStack";
 import { useObtenerTodosLosDoctoresQuery } from "../stack/DoctorStack";
 import { useAgregarHorarioMutation } from "../stack/HoraryStack";
 
-// Datos ficticios
-// const specialties = [
-//   { id: 1, name: "Cardiología" },
-//   { id: 2, name: "Pediatría" },
-//   { id: 3, name: "Dermatología" },
-//   { id: 4, name: "Traumatología" },
-//   { id: 5, name: "Neurología" }
-// ];
-
-// const doctors = [
-//   { dni: "12345678", name: "Dr. Carlos Ramírez", specialtyId: 1 },
-//   { dni: "23456789", name: "Dra. María López", specialtyId: 1 },
-//   { dni: "34567890", name: "Dr. Juan Pérez", specialtyId: 2 },
-//   { dni: "45678901", name: "Dra. Ana Torres", specialtyId: 2 },
-//   { dni: "56789012", name: "Dr. Luis Gómez", specialtyId: 3 },
-//   { dni: "67890123", name: "Dra. Sofia Mendoza", specialtyId: 4 },
-//   { dni: "78901234", name: "Dr. Pedro Castillo", specialtyId: 5 }
-// ];
-
-// const offices = [
-//   { id: 1, name: "Consultorio 101", specialtyIds: [1, 3] },
-//   { id: 2, name: "Consultorio 102", specialtyIds: [2, 4] },
-//   { id: 3, name: "Consultorio 103", specialtyIds: [1, 5] },
-//   { id: 4, name: "Consultorio 201", specialtyIds: [2, 3] },
-//   { id: 5, name: "Consultorio 202", specialtyIds: [4, 5] }
-// ];
-
-// Generar horarios en intervalos de 20 minutos
-const generateTimeSlots = () => {
-  const slots = [];
-  for (let hour = 8; hour < 20; hour++) {
+// Generar bloques de horarios de 20 minutos
+const generateTimeBlocks = () => {
+  const blocks = [];
+  for (let hour = 8; hour < 18; hour++) {
     for (let min = 0; min < 60; min += 20) {
-      const time = `${hour.toString().padStart(2, "0")}:${min
+      const startHour = hour.toString().padStart(2, "0");
+      const startMin = min.toString().padStart(2, "0");
+      const endMin = ((min + 20) % 60).toString().padStart(2, "0");
+      const endHour = (min + 20 >= 60 ? hour + 1 : hour)
         .toString()
-        .padStart(2, "0")}`;
-      slots.push(time);
+        .padStart(2, "0");
+
+      const startTime = `${startHour}:${startMin}`;
+      const endTime = `${endHour}:${endMin}`;
+
+      blocks.push({
+        id: `${startTime}-${endTime}`,
+        start: `${startTime}:00`,
+        end: `${endTime}:00`,
+        label: `${startTime} - ${endTime}`,
+      });
     }
   }
-  return slots;
+  return blocks;
 };
 
-const timeSlots = generateTimeSlots();
+const timeBlocks = generateTimeBlocks();
 
 export const ModalHorary = () => {
   const { user } = useAuthStore();
   const { register, handleSubmit, setValue, watch } = useForm({
     defaultValues: {
       employeeDni: user?.dni || "",
-      doctorDni: "",
-      specialtyId: "",
-      officeId: "",
       date: "",
-      startTime: "",
-      endTime: "",
       status: true,
     },
   });
@@ -70,10 +50,12 @@ export const ModalHorary = () => {
   const { data: doctors } = useObtenerTodosLosDoctoresQuery();
   const { data: offices } = useObtenerConsultoriosQuery();
   const { setModalHoraryState } = useHoraryStore();
+
   const [selectedSpecialty, setSelectedSpecialty] = useState(null);
   const [selectedDoctor, setSelectedDoctor] = useState(null);
-  const [startTime, setStartTime] = useState("");
-  const [endTime, setEndTime] = useState("");
+  const [selectedOffice, setSelectedOffice] = useState(null);
+  const [selectedTimeBlocks, setSelectedTimeBlocks] = useState([]);
+  const [selectedDate, setSelectedDate] = useState("");
 
   const modalRef = useRef(null);
 
@@ -86,72 +68,95 @@ export const ModalHorary = () => {
 
   // Filtrar consultorios por especialidad
   const availableOffices = selectedSpecialty
-    ? offices.filter((office) =>
+    ? offices?.filter((office) =>
         office.specialtyIds.includes(selectedSpecialty.id)
       )
-    : [];
-
-  // Generar horarios finales basados en el inicio
-  const endTimeSlots = startTime
-    ? timeSlots.filter((slot) => slot > startTime)
     : [];
 
   const handleSelectSpecialty = (specialty) => {
     setSelectedSpecialty(specialty);
     setSelectedDoctor(null);
-    setStartTime("");
-    setEndTime("");
-    setValue("specialtyId", specialty.id);
-    setValue("doctorDni", "");
-    setValue("officeId", "");
-    setValue("startTime", "");
-    setValue("endTime", "");
+    setSelectedOffice(null);
+    setSelectedTimeBlocks([]);
+    setSelectedDate("");
   };
 
   const handleSelectDoctor = (doctor) => {
     setSelectedDoctor(doctor);
-    setValue("doctorDni", doctor.dni);
+    setSelectedOffice(null);
+    setSelectedTimeBlocks([]);
   };
 
-  const handleStartTimeChange = (time) => {
-    setStartTime(time);
-    setEndTime("");
-    setValue("startTime", `${time}:00`);
-    setValue("endTime", "");
+  const handleSelectOffice = (office) => {
+    setSelectedOffice(office);
   };
 
-  const handleEndTimeChange = (time) => {
-    setEndTime(time);
-    setValue("endTime", `${time}:00`);
+  const handleToggleTimeBlock = (block) => {
+    setSelectedTimeBlocks((prev) => {
+      const exists = prev.find((b) => b.id === block.id);
+      if (exists) {
+        return prev.filter((b) => b.id !== block.id);
+      } else {
+        return [...prev, block];
+      }
+    });
   };
 
-  const onSubmit = (data) => {
-    // Validar que todos los campos requeridos estén presentes
-    if (
-      !data.doctorDni ||
-      !data.specialtyId ||
-      !data.officeId ||
-      !data.date ||
-      !data.startTime ||
-      !data.endTime
-    ) {
-      alert("Por favor complete todos los campos requeridos");
+  const handleDateChange = (date) => {
+    setSelectedDate(date);
+    setValue("date", date);
+  };
+
+  const onSubmit = async (data) => {
+    // Validaciones
+    if (!selectedDoctor) {
+      alert("Por favor seleccione un doctor");
+      return;
+    }
+    if (!selectedOffice) {
+      alert("Por favor seleccione un consultorio");
+      return;
+    }
+    if (!selectedDate) {
+      alert("Por favor seleccione una fecha");
+      return;
+    }
+    if (selectedTimeBlocks.length === 0) {
+      alert("Por favor seleccione al menos un bloque de horario");
       return;
     }
 
-    const formattedData = {
-      doctorDni: data.doctorDni,
-      employeeDni: data.employeeDni,
-      specialtyId: Number(data.specialtyId),
-      officeId: Number(data.officeId),
-      date: data.date,
-      startTime: data.startTime,
-      endTime: data.endTime,
-      status: data.status ?? true,
-    };
+    // Crear una petición por cada bloque de tiempo seleccionado
+    const promises = selectedTimeBlocks.map((block) => {
+      const horarioData = {
+        doctorDni: selectedDoctor.dni,
+        employeeDni: data.employeeDni,
+        specialtyId: Number(selectedSpecialty.id),
+        officeId: Number(selectedOffice.id),
+        date: selectedDate,
+        startTime: block.start,
+        endTime: block.end,
+        status: data.status ?? true,
+      };
 
-    console.log(formattedData);
-    agregarHorario(formattedData);
+      console.log("Enviando horario:", horarioData);
+
+      return new Promise((resolve, reject) => {
+        agregarHorario(horarioData, {
+          onSuccess: () => resolve(),
+          onError: (error) => reject(error),
+        });
+      });
+    });
+
+    try {
+      await Promise.all(promises);
+      alert(`Se crearon ${selectedTimeBlocks.length} horarios exitosamente`);
+      setModalHoraryState(false);
+    } catch (error) {
+      console.error("Error al crear horarios:", error);
+      alert("Hubo un error al crear algunos horarios");
+    }
   };
 
   return (
@@ -163,13 +168,20 @@ export const ModalHorary = () => {
       <div className="fixed inset-0 flex items-center justify-center pointer-events-none z-50">
         <div
           ref={modalRef}
-          className="w-full max-w-3xl bg-white rounded-2xl shadow-xl border border-slate-100 pointer-events-auto max-h-[90vh] flex flex-col"
+          className="w-full max-w-4xl bg-white rounded-2xl shadow-xl border border-slate-100 pointer-events-auto max-h-[90vh] flex flex-col"
         >
           {/* Header */}
           <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between shrink-0">
-            <h1 className="text-xl font-semibold text-slate-900">
-              Crear horario médico
-            </h1>
+            <div>
+              <h1 className="text-xl font-semibold text-slate-900">
+                Crear horario médico
+              </h1>
+              {selectedTimeBlocks.length > 0 && (
+                <p className="text-sm text-cyan-600 mt-1">
+                  {selectedTimeBlocks.length} bloque(s) seleccionado(s)
+                </p>
+              )}
+            </div>
             <button
               type="button"
               onClick={() => setModalHoraryState(false)}
@@ -246,103 +258,26 @@ export const ModalHorary = () => {
               </div>
             )}
 
-            {/* Paso 3: Fecha y Horario */}
+            {/* Paso 3: Seleccionar Consultorio */}
             {selectedDoctor && (
-              <div className="space-y-4 animate-fadeIn">
+              <div className="space-y-2 animate-fadeIn">
                 <label className="text-sm font-semibold text-slate-700 flex items-center gap-2">
                   <span className="flex items-center justify-center w-6 h-6 rounded-full bg-cyan-600 text-white text-xs">
                     3
                   </span>
-                  Fecha y horario
-                </label>
-
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  {/* Fecha */}
-                  <div className="flex flex-col gap-1">
-                    <label
-                      htmlFor="date"
-                      className="text-xs font-medium text-slate-600"
-                    >
-                      Fecha
-                    </label>
-                    <input
-                      type="date"
-                      id="date"
-                      className="p-2.5 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500"
-                      {...register("date", { required: true })}
-                    />
-                  </div>
-
-                  {/* Hora Inicio */}
-                  <div className="flex flex-col gap-1">
-                    <label
-                      htmlFor="startTime"
-                      className="text-xs font-medium text-slate-600"
-                    >
-                      Hora inicio
-                    </label>
-                    <select
-                      id="startTime"
-                      value={startTime}
-                      onChange={(e) => handleStartTimeChange(e.target.value)}
-                      className="p-2.5 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500"
-                    >
-                      <option value="">Seleccionar</option>
-                      {timeSlots.map((slot) => (
-                        <option key={slot} value={slot}>
-                          {slot}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-
-                  {/* Hora Fin */}
-                  <div className="flex flex-col gap-1">
-                    <label
-                      htmlFor="endTime"
-                      className="text-xs font-medium text-slate-600"
-                    >
-                      Hora fin
-                    </label>
-                    <select
-                      id="endTime"
-                      value={endTime}
-                      onChange={(e) => handleEndTimeChange(e.target.value)}
-                      disabled={!startTime}
-                      className="p-2.5 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 disabled:bg-slate-100 disabled:cursor-not-allowed"
-                    >
-                      <option value="">Seleccionar</option>
-                      {endTimeSlots.map((slot) => (
-                        <option key={slot} value={slot}>
-                          {slot}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* Paso 4: Seleccionar Consultorio */}
-            {selectedDoctor && startTime && endTime && (
-              <div className="space-y-2 animate-fadeIn">
-                <label className="text-sm font-semibold text-slate-700 flex items-center gap-2">
-                  <span className="flex items-center justify-center w-6 h-6 rounded-full bg-cyan-600 text-white text-xs">
-                    4
-                  </span>
                   Seleccione el consultorio
                 </label>
-                {availableOffices.length > 0 ? (
+                {availableOffices?.length > 0 ? (
                   <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
                     {availableOffices.map((office) => (
                       <button
                         key={office.id}
                         type="button"
-                        onClick={() => setValue("officeId", office.id)}
+                        onClick={() => handleSelectOffice(office)}
                         className={`p-3 rounded-lg border-2 text-sm font-medium transition-all ${
-                          office.id === watch("officeId")
-                            ? "bg-cyan-50 border-cyan-500"
-                            : ""
+                          selectedOffice?.id === office.id
+                            ? "border-cyan-600 bg-cyan-50 text-cyan-700"
+                            : "border-slate-200 bg-white text-slate-700 hover:border-cyan-300"
                         }`}
                       >
                         {office.name}
@@ -357,14 +292,64 @@ export const ModalHorary = () => {
               </div>
             )}
 
+            {/* Paso 4: Fecha */}
+            {selectedOffice && (
+              <div className="space-y-2 animate-fadeIn">
+                <label className="text-sm font-semibold text-slate-700 flex items-center gap-2">
+                  <span className="flex items-center justify-center w-6 h-6 rounded-full bg-cyan-600 text-white text-xs">
+                    4
+                  </span>
+                  Seleccione la fecha
+                </label>
+                <input
+                  type="date"
+                  value={selectedDate}
+                  onChange={(e) => handleDateChange(e.target.value)}
+                  className="p-2.5 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 w-full max-w-xs"
+                />
+              </div>
+            )}
+
+            {/* Paso 5: Grid de Bloques de Horario */}
+            {selectedOffice && selectedDate && (
+              <div className="space-y-3 animate-fadeIn">
+                <label className="text-sm font-semibold text-slate-700 flex items-center gap-2">
+                  <span className="flex items-center justify-center w-6 h-6 rounded-full bg-cyan-600 text-white text-xs">
+                    5
+                  </span>
+                  Seleccione los bloques de horario (8:00 - 18:00)
+                </label>
+                <p className="text-xs text-slate-500">
+                  Haga clic en los bloques para seleccionarlos. Puede
+                  seleccionar múltiples bloques.
+                </p>
+                <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 max-h-96 overflow-y-auto p-2 bg-slate-50 rounded-lg">
+                  {timeBlocks.map((block) => {
+                    const isSelected = selectedTimeBlocks.find(
+                      (b) => b.id === block.id
+                    );
+                    return (
+                      <button
+                        key={block.id}
+                        type="button"
+                        onClick={() => handleToggleTimeBlock(block)}
+                        className={`p-2.5 rounded-lg border-2 text-xs font-medium transition-all ${
+                          isSelected
+                            ? "border-cyan-600 bg-cyan-600 text-white shadow-md"
+                            : "border-slate-200 bg-white text-slate-700 hover:border-cyan-400 hover:bg-cyan-50"
+                        }`}
+                      >
+                        {block.label}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+
             {/* Campos ocultos */}
             <input type="hidden" {...register("employeeDni")} />
-            <input type="hidden" {...register("specialtyId")} />
-            <input type="hidden" {...register("doctorDni")} />
-            <input
-              type="hidden"
-              {...register("officeId", { required: true })}
-            />
+            <input type="hidden" {...register("date")} />
             <input type="hidden" {...register("status")} />
           </div>
 
@@ -379,10 +364,12 @@ export const ModalHorary = () => {
             </button>
             <button
               onClick={handleSubmit(onSubmit)}
-              disabled={isPending}
+              disabled={isPending || selectedTimeBlocks.length === 0}
               className="px-5 py-2.5 text-sm font-medium text-white bg-cyan-600 hover:bg-cyan-700 rounded-lg transition-colors disabled:bg-slate-300 disabled:cursor-not-allowed"
             >
-              {isPending ? "Guardando..." : "Crear horario"}
+              {isPending
+                ? "Guardando..."
+                : `Crear ${selectedTimeBlocks.length} horario(s)`}
             </button>
           </div>
         </div>
