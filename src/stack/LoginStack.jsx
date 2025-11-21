@@ -10,8 +10,8 @@ export const useLoginMutate = () => {
     onSuccess: () => {
       toast.success("Bienvenido, Administrador");
     },
-    onError: () => {
-      toast.error("Credenciales incorrectas");
+    onError: (error) => {
+      toast.error(error.message);
     },
   });
 };

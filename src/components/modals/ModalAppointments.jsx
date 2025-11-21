@@ -1,10 +1,10 @@
 import { useState, useRef } from "react";
 import { useForm } from "react-hook-form";
-import { useAuthStore } from "../store/AuthStore";
-import { useAppointmentsStore } from "../store/AppointmentsStore";
-import { useObtenerTodosLosHorariosQuery } from "../stack/HoraryStack";
-import { useMostrarPacientesQuery } from "../stack/PacienteStack";
-import { useAgregarAppointmentMutation } from "../stack/AppointmentsStack";
+import { useAuthStore } from "../../store/AuthStore";
+import { useAppointmentsStore } from "../../store/AppointmentsStore";
+import { useObtenerTodosLosHorariosQuery } from "../../stack/HoraryStack";
+import { useMostrarPacientesQuery } from "../../stack/PacienteStack";
+import { useAgregarAppointmentMutation } from "../../stack/AppointmentsStack";
 // import { useMostrarHorariosQuery } from "../stack/HoraryStack";
 // import { useMostrarPacientesQuery } from "../stack/PatientStack";
 // import { useAgregarCitaMutation } from "../stack/AppointmentsStack";
@@ -143,7 +143,7 @@ export const ModalAppointments = () => {
   // const { mutate: agregarCita } = useAgregarCitaMutation();
 
   const { data: mockSchedules } = useObtenerTodosLosHorariosQuery();
-  const {data: mockPatients} = useMostrarPacientesQuery()
+  const { data: mockPatients } = useMostrarPacientesQuery();
 
   const schedules = mockSchedules;
   const patients = mockPatients;
@@ -182,7 +182,7 @@ export const ModalAppointments = () => {
       patient.lastname.toLowerCase().includes(searchLower) ||
       patient.dni.includes(searchPatient)
     );
-  });
+  }) || [];
 
   const handleSelectDate = (date) => {
     setSelectedDate(date);
@@ -215,8 +215,6 @@ export const ModalAppointments = () => {
       patientId: Number(data.patientId),
       // status: data.status ?? true,
     };
-
-    console.log(formattedData);
 
     agregarCita(formattedData);
   };

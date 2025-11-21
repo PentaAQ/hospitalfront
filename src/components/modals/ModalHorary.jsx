@@ -1,11 +1,12 @@
-import { useState, useRef } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { useObtenerConsultoriosQuery } from "../stack/ConsultoryStack";
-import { useAuthStore } from "../store/AuthStore";
-import { useHoraryStore } from "../store/HoraryStore";
-import { useMostrarEspecilitiesQuery } from "../stack/EspecilitiesStack";
-import { useObtenerTodosLosDoctoresQuery } from "../stack/DoctorStack";
-import { useAgregarHorarioMutation } from "../stack/HoraryStack";
+import { toast } from "sonner";
+import { useObtenerConsultoriosQuery } from "../../stack/ConsultoryStack";
+import { useAuthStore } from "../../store/AuthStore";
+import { useHoraryStore } from "../../store/HoraryStore";
+import { useMostrarEspecilitiesQuery } from "../../stack/EspecilitiesStack";
+import { useObtenerTodosLosDoctoresQuery } from "../../stack/DoctorStack";
+import { useAgregarHorarioMutation } from "../../stack/HoraryStack";
 
 // Generar bloques de horarios de 20 minutos
 const generateTimeBlocks = () => {
@@ -37,7 +38,7 @@ const timeBlocks = generateTimeBlocks();
 
 export const ModalHorary = () => {
   const { user } = useAuthStore();
-  const { register, handleSubmit, setValue, watch } = useForm({
+  const { register, handleSubmit, setValue } = useForm({
     defaultValues: {
       employeeDni: user?.dni || "",
       date: "",
@@ -56,8 +57,6 @@ export const ModalHorary = () => {
   const [selectedOffice, setSelectedOffice] = useState(null);
   const [selectedTimeBlocks, setSelectedTimeBlocks] = useState([]);
   const [selectedDate, setSelectedDate] = useState("");
-
-  const modalRef = useRef(null);
 
   // Filtrar doctores por especialidad
   const availableDoctors = selectedSpecialty
@@ -110,19 +109,19 @@ export const ModalHorary = () => {
   const onSubmit = async (data) => {
     // Validaciones
     if (!selectedDoctor) {
-      alert("Por favor seleccione un doctor");
+      toast.error("Por favor seleccione un doctor");
       return;
     }
     if (!selectedOffice) {
-      alert("Por favor seleccione un consultorio");
+      toast.error("Por favor seleccione un consultorio");
       return;
     }
     if (!selectedDate) {
-      alert("Por favor seleccione una fecha");
+      toast.error("Por favor seleccione una fecha");
       return;
     }
     if (selectedTimeBlocks.length === 0) {
-      alert("Por favor seleccione al menos un bloque de horario");
+      toast.error("Seleccione al menos un bloque de horario");
       return;
     }
 
@@ -139,8 +138,6 @@ export const ModalHorary = () => {
         status: data.status ?? true,
       };
 
-      console.log("Enviando horario:", horarioData);
-
       return new Promise((resolve, reject) => {
         agregarHorario(horarioData, {
           onSuccess: () => resolve(),
@@ -151,11 +148,10 @@ export const ModalHorary = () => {
 
     try {
       await Promise.all(promises);
-      alert(`Se crearon ${selectedTimeBlocks.length} horarios exitosamente`);
+      toast.success(`Se crearon ${selectedTimeBlocks.length} horario(s) correctamente`);
       setModalHoraryState(false);
     } catch (error) {
-      console.error("Error al crear horarios:", error);
-      alert("Hubo un error al crear algunos horarios");
+      toast.error(error.message || "Hubo un error al crear algunos horarios");
     }
   };
 
@@ -166,10 +162,7 @@ export const ModalHorary = () => {
         onClick={() => setModalHoraryState(false)}
       ></div>
       <div className="fixed inset-0 flex items-center justify-center pointer-events-none z-50">
-        <div
-          ref={modalRef}
-          className="w-full max-w-4xl bg-white rounded-2xl shadow-xl border border-slate-100 pointer-events-auto max-h-[90vh] flex flex-col"
-        >
+        <div className="w-full max-w-4xl bg-white rounded-2xl shadow-xl border border-slate-100 pointer-events-auto max-h-[90vh] flex flex-col">
           {/* Header */}
           <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between shrink-0">
             <div>

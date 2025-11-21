@@ -1,19 +1,18 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Search, X } from "lucide-react";
-import { useObtenerTodasLasCitasQuery } from "../stack/AppointmentsStack";
-import { useAuthStore } from "../store/AuthStore";
-import { useAgregarPayMutation } from "../stack/PayStack";
+import { useObtenerTodasLasCitasQuery } from "../../stack/AppointmentsStack";
+import { useAuthStore } from "../../store/AuthStore";
+import { useAgregarPayMutation } from "../../stack/PayStack";
 
 export const ModalPay = ({ appointmentId, setModalPayState }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [showDropdown, setShowDropdown] = useState(false);
   const [selectedAppointment, setSelectedAppointment] = useState(null);
   const { user } = useAuthStore();
-  const { data: MOCK_APPOINTMENTS } = useObtenerTodasLasCitasQuery();
-  console.log(MOCK_APPOINTMENTS);
+  const { data: appointments } = useObtenerTodasLasCitasQuery();
 
-  const {mutate:agregarPago}=useAgregarPayMutation();
+  const { mutate: agregarPago } = useAgregarPayMutation();
   const {
     register,
     handleSubmit,
@@ -28,7 +27,7 @@ export const ModalPay = ({ appointmentId, setModalPayState }) => {
     },
   });
 
-  const filteredAppointments = MOCK_APPOINTMENTS?.filter((apt) => {
+  const filteredAppointments = appointments?.filter((apt) => {
     if (!searchTerm) return false;
     const searchLower = searchTerm.toLowerCase();
     return (
@@ -52,7 +51,6 @@ export const ModalPay = ({ appointmentId, setModalPayState }) => {
   };
 
   const onSubmit = (data) => {
-    console.log(data);
     agregarPago(data);
   };
 
@@ -81,7 +79,7 @@ export const ModalPay = ({ appointmentId, setModalPayState }) => {
             className="px-6 py-4 space-y-4 max-h-[70vh] overflow-y-auto"
           >
             <div className="grid grid-cols-1 gap-4">
-              <div className="flex flex-col gap-1">
+              <div className="hidden flex-col gap-1">
                 <label
                   htmlFor="employeeDni"
                   className="text-sm font-medium text-slate-700"
@@ -145,24 +143,29 @@ export const ModalPay = ({ appointmentId, setModalPayState }) => {
                               onClick={() => handleSelectAppointment(apt)}
                               className="w-full text-left px-4 py-3 hover:bg-slate-50 border-b border-slate-100 last:border-b-0"
                             >
-<div className="flex justify-between items-start w-full">
+                              <div className="flex justify-between items-start w-full">
                                 <div className="flex-1">
                                   <p className="text-sm font-medium text-slate-900">
-                                    #{apt.id} - {apt.patient.name} {apt.patient.lastname}
+                                    #{apt.id} - {apt.patient.name}{" "}
+                                    {apt.patient.lastname}
                                   </p>
                                   <p className="text-xs text-slate-600 mt-1">
                                     {apt.schedule?.specialty?.name}
                                   </p>
                                   <p className="text-xs text-slate-500 mt-1">
-                                    Dr(a). {apt.schedule?.doctor?.name} {apt.schedule?.doctor?.lastname}
+                                    Dr(a). {apt.schedule?.doctor?.name}{" "}
+                                    {apt.schedule?.doctor?.lastname}
                                   </p>
                                 </div>
                                 <div className="text-right ml-4">
                                   <p className="text-xs text-slate-500 whitespace-nowrap">
-                                    {new Date(apt.schedule?.date).toLocaleDateString()}
+                                    {new Date(
+                                      apt.schedule?.date
+                                    ).toLocaleDateString()}
                                   </p>
                                   <p className="text-xs text-slate-500">
-                                    {apt.schedule?.startTime?.substring(0, 5)} - {apt.schedule?.endTime?.substring(0, 5)}
+                                    {apt.schedule?.startTime?.substring(0, 5)} -{" "}
+                                    {apt.schedule?.endTime?.substring(0, 5)}
                                   </p>
                                   <p className="text-sm font-semibold text-cyan-700 mt-1">
                                     S/ {apt.finalCost?.toFixed(2)}
@@ -178,21 +181,35 @@ export const ModalPay = ({ appointmentId, setModalPayState }) => {
                   <div className="p-3 bg-cyan-50 border border-cyan-200 rounded-lg">
                     <div className="flex justify-between items-start">
                       <div>
-<p className="text-sm font-medium text-slate-900">
+                        <p className="text-sm font-medium text-slate-900">
                           Cita #{selectedAppointment.id}
                         </p>
                         <p className="text-xs text-slate-600 mt-1">
-                          Paciente: {selectedAppointment.patient?.name} {selectedAppointment.patient?.lastname}
+                          Paciente: {selectedAppointment.patient?.name}{" "}
+                          {selectedAppointment.patient?.lastname}
                         </p>
                         <p className="text-xs text-slate-600">
-                          Servicio: {selectedAppointment.schedule?.specialty?.name}
+                          Servicio:{" "}
+                          {selectedAppointment.schedule?.specialty?.name}
                         </p>
                         <p className="text-xs text-slate-500">
-                          Dr(a). {selectedAppointment.schedule?.doctor?.name} {selectedAppointment.schedule?.doctor?.lastname}
+                          Dr(a). {selectedAppointment.schedule?.doctor?.name}{" "}
+                          {selectedAppointment.schedule?.doctor?.lastname}
                         </p>
                         <p className="text-xs text-slate-500 mt-1">
-                          {new Date(selectedAppointment.schedule?.date).toLocaleDateString()} -{" "}
-                          {selectedAppointment.schedule?.startTime?.substring(0, 5)} a {selectedAppointment.schedule?.endTime?.substring(0, 5)}
+                          {new Date(
+                            selectedAppointment.schedule?.date
+                          ).toLocaleDateString()}{" "}
+                          -{" "}
+                          {selectedAppointment.schedule?.startTime?.substring(
+                            0,
+                            5
+                          )}{" "}
+                          a{" "}
+                          {selectedAppointment.schedule?.endTime?.substring(
+                            0,
+                            5
+                          )}
                         </p>
                         <p className="text-sm font-semibold text-cyan-700 mt-1">
                           Total: S/ {selectedAppointment.finalCost?.toFixed(2)}

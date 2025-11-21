@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import {
   ChevronLeft,
   ChevronRight,
@@ -7,388 +7,35 @@ import {
   User,
   Stethoscope,
   MapPin,
-  Phone,
   CreditCard,
   FileText,
-  Plus,
   Filter,
 } from "lucide-react";
 import { useAppointmentsStore } from "../store/AppointmentsStore";
-import { ModalAppointments } from "../components/ModalAppointments";
+import { ModalAppointments } from "../components/modals/ModalAppointments";
 import { BtnAddAppointments } from "../components/ui/BtnAddAppointments";
 import { useObtenerTodasLasCitasQuery } from "../stack/AppointmentsStack";
+import { useAppointmentsCalendar } from "../hooks/useAppointmentsCalendar";
 
-// Datos ficticios - Reemplazar con datos reales del backend
-// const mockAppointments = [
-//   {
-//     id: 1,
-//     schedule: {
-//       id: 1,
-//       doctor: {
-//         id: 1,
-//         dni: "12345678",
-//         name: "Juan",
-//         lastname: "Pérez",
-//         codigo: "DOC001",
-//         specialties: [],
-//       },
-//       specialty: {
-//         id: 1,
-//         name: "Cardiología",
-//         description: "Especialista en corazón",
-//         cost: 150,
-//         status: true,
-//       },
-//       office: {
-//         id: 1,
-//         name: "Consultorio A",
-//         address: "Av. Principal 123",
-//         floor: 2,
-//         officeNumber: "201",
-//         status: true,
-//         specialtyIds: [1],
-//       },
-//       date: "2025-11-17",
-//       startTime: "09:00:00",
-//       endTime: "10:00:00",
-//       status: true,
-//     },
-//     employee: {
-//       id: 1,
-//       dni: "87654321",
-//       name: "María",
-//       lastname: "García",
-//       role: "Recepcionista",
-//       isEnabled: true,
-//     },
-//     patient: {
-//       id: 1,
-//       dni: "11223344",
-//       name: "Pedro",
-//       lastname: "Ramírez",
-//       address: "Calle Los Olivos 456",
-//       phone: "987654321",
-//       birthdate: "1985-05-15",
-//       gender: "Masculino",
-//       status: true,
-//     },
-//     solicitationDateTime: "2025-11-15T14:30:00",
-//     finalCost: 150,
-//     status: "PENDIENTE",
-//   },
-//   {
-//     id: 2,
-//     schedule: {
-//       id: 2,
-//       doctor: {
-//         id: 2,
-//         dni: "23456789",
-//         name: "Ana",
-//         lastname: "Martínez",
-//         codigo: "DOC002",
-//         specialties: [],
-//       },
-//       specialty: {
-//         id: 2,
-//         name: "Pediatría",
-//         description: "Especialista en niños",
-//         cost: 120,
-//         status: true,
-//       },
-//       office: {
-//         id: 2,
-//         name: "Consultorio B",
-//         address: "Av. Principal 123",
-//         floor: 1,
-//         officeNumber: "105",
-//         status: true,
-//         specialtyIds: [2],
-//       },
-//       date: "2025-11-17",
-//       startTime: "14:00:00",
-//       endTime: "15:00:00",
-//       status: true,
-//     },
-//     employee: {
-//       id: 2,
-//       dni: "98765432",
-//       name: "Carlos",
-//       lastname: "López",
-//       role: "Asistente",
-//       isEnabled: true,
-//     },
-//     patient: {
-//       id: 2,
-//       dni: "22334455",
-//       name: "Lucía",
-//       lastname: "Torres",
-//       address: "Jr. Las Flores 789",
-//       phone: "912345678",
-//       birthdate: "2015-08-20",
-//       gender: "Femenino",
-//       status: true,
-//     },
-//     solicitationDateTime: "2025-11-16T10:15:00",
-//     finalCost: 120,
-//     status: "COMPLETADO",
-//   },
-//   {
-//     id: 3,
-//     schedule: {
-//       id: 3,
-//       doctor: {
-//         id: 1,
-//         dni: "12345678",
-//         name: "Juan",
-//         lastname: "Pérez",
-//         codigo: "DOC001",
-//         specialties: [],
-//       },
-//       specialty: {
-//         id: 1,
-//         name: "Cardiología",
-//         description: "Especialista en corazón",
-//         cost: 150,
-//         status: true,
-//       },
-//       office: {
-//         id: 1,
-//         name: "Consultorio A",
-//         address: "Av. Principal 123",
-//         floor: 2,
-//         officeNumber: "201",
-//         status: true,
-//         specialtyIds: [1],
-//       },
-//       date: "2025-11-18",
-//       startTime: "10:00:00",
-//       endTime: "11:00:00",
-//       status: true,
-//     },
-//     employee: {
-//       id: 1,
-//       dni: "87654321",
-//       name: "María",
-//       lastname: "García",
-//       role: "Recepcionista",
-//       isEnabled: true,
-//     },
-//     patient: {
-//       id: 3,
-//       dni: "33445566",
-//       name: "José",
-//       lastname: "Mendoza",
-//       address: "Av. Los Pinos 321",
-//       phone: "923456789",
-//       birthdate: "1970-03-10",
-//       gender: "Masculino",
-//       status: true,
-//     },
-//     solicitationDateTime: "2025-11-17T09:00:00",
-//     finalCost: 150,
-//     status: "PENDIENTE",
-//   },
-//   {
-//     id: 4,
-//     schedule: {
-//       id: 4,
-//       doctor: {
-//         id: 3,
-//         dni: "34567890",
-//         name: "Roberto",
-//         lastname: "Sánchez",
-//         codigo: "DOC003",
-//         specialties: [],
-//       },
-//       specialty: {
-//         id: 3,
-//         name: "Neurología",
-//         description: "Especialista en sistema nervioso",
-//         cost: 180,
-//         status: true,
-//       },
-//       office: {
-//         id: 3,
-//         name: "Consultorio C",
-//         address: "Av. Principal 123",
-//         floor: 3,
-//         officeNumber: "302",
-//         status: true,
-//         specialtyIds: [3],
-//       },
-//       date: "2025-11-19",
-//       startTime: "15:00:00",
-//       endTime: "16:00:00",
-//       status: true,
-//     },
-//     employee: {
-//       id: 3,
-//       dni: "76543210",
-//       name: "Laura",
-//       lastname: "Díaz",
-//       role: "Enfermera",
-//       isEnabled: true,
-//     },
-//     patient: {
-//       id: 4,
-//       dni: "44556677",
-//       name: "Carmen",
-//       lastname: "Vega",
-//       address: "Calle San Martín 654",
-//       phone: "934567890",
-//       birthdate: "1992-11-25",
-//       gender: "Femenino",
-//       status: true,
-//     },
-//     solicitationDateTime: "2025-11-17T11:30:00",
-//     finalCost: 180,
-//     status: "CANCELADO",
-//   },
-//   {
-//     id: 5,
-//     schedule: {
-//       id: 5,
-//       doctor: {
-//         id: 2,
-//         dni: "23456789",
-//         name: "Ana",
-//         lastname: "Martínez",
-//         codigo: "DOC002",
-//         specialties: [],
-//       },
-//       specialty: {
-//         id: 2,
-//         name: "Pediatría",
-//         description: "Especialista en niños",
-//         cost: 120,
-//         status: true,
-//       },
-//       office: {
-//         id: 2,
-//         name: "Consultorio B",
-//         address: "Av. Principal 123",
-//         floor: 1,
-//         officeNumber: "105",
-//         status: true,
-//         specialtyIds: [2],
-//       },
-//       date: "2025-11-20",
-//       startTime: "09:00:00",
-//       endTime: "10:00:00",
-//       status: true,
-//     },
-//     employee: {
-//       id: 2,
-//       dni: "98765432",
-//       name: "Carlos",
-//       lastname: "López",
-//       role: "Asistente",
-//       isEnabled: true,
-//     },
-//     patient: {
-//       id: 5,
-//       dni: "55667788",
-//       name: "Miguel",
-//       lastname: "Castro",
-//       address: "Jr. Independencia 987",
-//       phone: "945678901",
-//       birthdate: "2018-07-08",
-//       gender: "Masculino",
-//       status: true,
-//     },
-//     solicitationDateTime: "2025-11-16T16:45:00",
-//     finalCost: 120,
-//     status: "NOASISTIO",
-//   },
-// ];
 
 export const AppointmentsPage = () => {
   const { modalAppointmentState } = useAppointmentsStore();
-  const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedAppointment, setSelectedAppointment] = useState(null);
   const [filterStatus, setFilterStatus] = useState("ALL");
   const [showFilters, setShowFilters] = useState(false);
 
   const { data: mockAppointments } = useObtenerTodasLasCitasQuery();
-  // Función para obtener días del mes
-  const getDaysInMonth = (date) => {
-    const year = date.getFullYear();
-    const month = date.getMonth();
-    const firstDay = new Date(year, month, 1);
-    const lastDay = new Date(year, month + 1, 0);
-    const daysInMonth = lastDay.getDate();
-    const startingDayOfWeek = firstDay.getDay();
-
-    const days = [];
-
-    for (let i = 0; i < startingDayOfWeek; i++) {
-      const prevMonthDay = new Date(year, month, -startingDayOfWeek + i + 1);
-      days.push({ date: prevMonthDay, isCurrentMonth: false });
-    }
-
-    for (let i = 1; i <= daysInMonth; i++) {
-      days.push({ date: new Date(year, month, i), isCurrentMonth: true });
-    }
-
-    const remainingDays = 42 - days.length;
-    for (let i = 1; i <= remainingDays; i++) {
-      days.push({ date: new Date(year, month + 1, i), isCurrentMonth: false });
-    }
-
-    return days;
-  };
-
-  // Función para obtener citas de un día específico
-  const getAppointmentsForDate = (date) => {
-    const dateStr = date.toISOString().split("T")[0];
-    let appointments = mockAppointments?.filter(
-      (apt) => apt.schedule.date === dateStr
-    );
-
-    if (filterStatus !== "ALL") {
-      appointments = appointments.filter((apt) => apt.status === filterStatus);
-    }
-
-    return appointments?.sort((a, b) =>
-      a.schedule.startTime.localeCompare(b.schedule.startTime)
-    );
-  };
-
-  const goToPreviousMonth = () => {
-    setCurrentDate(
-      new Date(currentDate.getFullYear(), currentDate.getMonth() - 1)
-    );
-  };
-
-  const goToNextMonth = () => {
-    setCurrentDate(
-      new Date(currentDate.getFullYear(), currentDate.getMonth() + 1)
-    );
-  };
-
-  const goToToday = () => {
-    setCurrentDate(new Date());
-  };
-
-  const monthNames = [
-    "Enero",
-    "Febrero",
-    "Marzo",
-    "Abril",
-    "Mayo",
-    "Junio",
-    "Julio",
-    "Agosto",
-    "Septiembre",
-    "Octubre",
-    "Noviembre",
-    "Diciembre",
-  ];
-
-  const dayNames = ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"];
-
-  const days = getDaysInMonth(currentDate);
-  const today = new Date().toDateString();
+  const {
+    currentDate,
+    days,
+    today,
+    monthNames,
+    dayNames,
+    goToPreviousMonth,
+    goToNextMonth,
+    goToToday,
+    getAppointmentsForDate,
+  } = useAppointmentsCalendar(mockAppointments, filterStatus);
 
   // Estilos por estado
   const statusStyles = {

@@ -1,5 +1,5 @@
-import { useAgregarEspecilitiesMutation } from "../stack/EspecilitiesStack";
-import { useEspecilitiesStore } from "../store/EspecilitiesStore";
+import { useAgregarEspecilitiesMutation } from "../../stack/EspecilitiesStack";
+import { useEspecilitiesStore } from "../../store/EspecilitiesStore";
 import { useForm } from "react-hook-form";
 
 export const ModalEspecialities = () => {

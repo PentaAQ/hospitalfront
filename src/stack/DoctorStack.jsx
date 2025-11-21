@@ -8,5 +8,6 @@ export const useObtenerTodosLosDoctoresQuery = () => {
   return useQuery({
     queryKey: ["obtenerTodosLosDoctores"],
     queryFn: () => obtenerTodosLosDoctores(token),
+
   });
 };

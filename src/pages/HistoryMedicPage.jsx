@@ -1,8 +1,8 @@
-import { ModalHistoryMedic } from "../components/ModalHistoryMedic";
+import { ModalHistoryMedic } from "../components/modals/ModalHistoryMedic";
 import { BtnAddHistoryMedic } from "../components/ui/BtnAddHistoryMedic";
 import { useHistoryMedicStore } from "../store/HistoryMedic";
 import { useMostrarHistoriasMedicasQuery } from "../stack/HistoryMedicStack";
-import { RowTableHistoryMedic } from "../components/RowTableHistoryMedic";
+import { RowTableHistoryMedic } from "../components/rows/RowTableHistoryMedic";
 
 export const HistoryMedicPage = () => {
   const { modalHistoryMedicState } = useHistoryMedicStore();
@@ -25,12 +25,12 @@ export const HistoryMedicPage = () => {
           <table className="w-full text-sm border-collapse">
             <thead className="bg-slate-50 text-slate-600">
               <tr>
-                <th className="px-4 py-3 text-left">ID</th>
-                <th className="px-4 py-3 text-left">DNI del paciente</th>
+                <th className="px-4 py-3 text-center">ID</th>
+                <th className="px-4 py-3 text-center">DNI del paciente</th>
                 <th className="px-4 py-3 text-center">Estado</th>
-                <th className="px-4 py-3 text-left">Fecha de creación</th>
-                <th className="px-4 py-3 text-left">Fecha de actualización</th>
-                <th className="px-4 py-3 text-right">Acciones</th>
+                <th className="px-4 py-3 text-center">Fecha de creación</th>
+                <th className="px-4 py-3 text-center">Fecha de actualización</th>
+                <th className="px-4 py-3 text-center">Acciones</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">

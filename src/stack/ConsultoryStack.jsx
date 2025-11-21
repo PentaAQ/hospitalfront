@@ -12,7 +12,7 @@ export const useObtenerConsultoriosQuery = () => {
             console.log(data);
         },
         onError: (error) => {
-            console.log(error);
+            console.log(error.message);
         },
     });
 };
@@ -24,13 +24,11 @@ export const useAgregarConsultorioMutation = () => {
     return useMutation({
         mutationFn: (consultorio) => agregarConsultorio(token, consultorio),
         onSuccess: (data) => {
-            console.log(data);
             setModalConsultoryState(false);
             queryClient.invalidateQueries({ queryKey: ["obtenerConsultorios"] });
             toast.success("Consultorio agregado correctamente");
         },
         onError: (error) => {
-            console.log(error);
             toast.error(error.message);
         },
     });

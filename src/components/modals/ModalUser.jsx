@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
-import { useUserStore } from "../store/UserStore";
-import { useMostrarEspecilitiesQuery } from "../stack/EspecilitiesStack";
-import { useAgregarUsuariosMutation } from "../stack/UserStack";
+import { useUserStore } from "../../store/UserStore";
+import { useMostrarEspecilitiesQuery } from "../../stack/EspecilitiesStack";
+import { useAgregarUsuariosMutation } from "../../stack/UserStack";
 
 export const ModalUser = () => {
   const { register, handleSubmit, watch } = useForm();
@@ -9,10 +9,9 @@ export const ModalUser = () => {
   const role = watch("role");
 
   const { data: specialties } = useMostrarEspecilitiesQuery();
-  const { mutate,isPending } = useAgregarUsuariosMutation();
+  const { mutate, isPending } = useAgregarUsuariosMutation();
 
   const onSubmit = (data) => {
-    console.log(data);
     mutate(data);
   };
 

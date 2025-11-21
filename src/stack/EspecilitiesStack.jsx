@@ -45,7 +45,7 @@ export const useDesabilitarEspecilitiesMutation = () => {
     mutationFn: (id) => desabilitarEspecilities(id, token),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["mostrarEspecilities"] });
-      toast.warning("Especialidad deshabilitada correctamente");
+      toast.warning("Especialidad Deshabilitada");
     },
     onError: (error) => {
       toast.error(error.message);
@@ -62,7 +62,7 @@ export const useHabilitarEspecilitiesMutation = () => {
     mutationFn: (id) => habilitarEspecilities(id, token),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["mostrarEspecilities"] });
-      toast.success("Especialidad habilitada correctamente");
+      toast.success("Especialidad Habilitada");
     },
     onError: (error) => {
       toast.error(error.message);

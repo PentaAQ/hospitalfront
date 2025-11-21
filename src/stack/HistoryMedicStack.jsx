@@ -9,11 +9,13 @@ export const useAgregarHistoriaMedicaMutation = () => {
   const queryClient = useQueryClient();
   const { setModalHistoryMedicState } = useHistoryMedicStore();
   return useMutation({
-    mutationFn: (newHistory) =>
-      agregarHistoriaMedica(newHistory, token),
+    mutationFn: (newHistory) => agregarHistoriaMedica(newHistory, token),
     onSuccess: (data) => {
       console.log(data);
-      queryClient.invalidateQueries({ queryKey: ["mostrarHistoriasMedicas"] });
+      queryClient.invalidateQueries({
+        queryKey: ["mostrarHistoriasMedicas"],
+        refetchType: "active",
+      });
       setModalHistoryMedicState(false);
       toast.success("Historia médica añadida correctamente");
     },
@@ -25,16 +27,11 @@ export const useAgregarHistoriaMedicaMutation = () => {
 };
 
 export const useMostrarHistoriasMedicasQuery = () => {
-   const { mostrarHistoriasMedicas } = useHistoryMedicStore();
-   const { token } = useAuthStore();
-   return useQuery({
-      queryKey: ["mostrarHistoriasMedicas"],
-      queryFn: () => mostrarHistoriasMedicas(token),
-      onSuccess: (data) => {
-         console.log(data);
-      },
-      onError: (error) => {
-         console.log(error);
-      },
-   });
+  const { mostrarHistoriasMedicas } = useHistoryMedicStore();
+  const { token } = useAuthStore();
+  return useQuery({
+    queryKey: ["mostrarHistoriasMedicas"],
+    queryFn: () => mostrarHistoriasMedicas(token),
+
+  });
 };

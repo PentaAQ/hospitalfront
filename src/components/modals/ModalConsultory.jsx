@@ -1,7 +1,7 @@
-import { useConsultoryStore } from "../store/ConsultoryStore";
-import { useMostrarEspecilitiesQuery } from "../stack/EspecilitiesStack";
+import { useConsultoryStore } from "../../store/ConsultoryStore";
+import { useMostrarEspecilitiesQuery } from "../../stack/EspecilitiesStack";
 import { useForm } from "react-hook-form";
-import { useAgregarConsultorioMutation } from "../stack/ConsultoryStack";
+import { useAgregarConsultorioMutation } from "../../stack/ConsultoryStack";
 
 export const ModalConsultory = () => {
   const { setModalConsultoryState } = useConsultoryStore();

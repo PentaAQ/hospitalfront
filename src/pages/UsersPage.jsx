@@ -1,5 +1,5 @@
-import { ModalUser } from "../components/ModalUser";
-import { RowTableUsers } from "../components/RowTableUsers";
+import { ModalUser } from "../components/modals/ModalUser";
+import { RowTableUsers } from "../components/rows/RowTableUsers";
 import { BtnAddUser } from "../components/ui/BtnAddUser";
 import { useUserStore } from "../store/UserStore";
 import { useMostrarUsuariosQuery } from "../stack/UserStack";

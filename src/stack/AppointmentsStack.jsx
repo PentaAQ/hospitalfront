@@ -12,11 +12,11 @@ export const useAgregarAppointmentMutation = () => {
   return useMutation({
     mutationFn: (appointment) => agregarAppointment(appointment, token),
     onSuccess: () => {
-      toast.success("Cita Creada Correctamente");
       setModalAppointmentState(false);
       queryClient.invalidateQueries({
         queryKey: ["obtenerTodasLasCitas"],
       });
+      toast.success("Cita Creada Correctamente");
     },
     onError: (error) => {
       toast.error(error.message);

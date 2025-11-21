@@ -1,33 +1,26 @@
 import { Icon } from "@iconify/react";
-import {
-  useDesabilitarEspecilitiesMutation,
-  useHabilitarEspecilitiesMutation,
-} from "../stack/EspecilitiesStack";
 
-export const RowTableEspecialities = ({ especialidad }) => {
-  const { mutate: desabilitar } = useDesabilitarEspecilitiesMutation();
-  const { mutate: habilitar } = useHabilitarEspecilitiesMutation();
+export const RowTablePacients = ({ paciente }) => {
   return (
     <tr className="hover:bg-slate-50 transition-colors">
-      <td className="px-4 py-3 align-middle">{especialidad.name}</td>
-      <td className="px-4 py-3 align-middle">{especialidad.description}</td>
-      <td className="px-4 py-3 align-middle">S/ {especialidad.cost}</td>
-      <td
-        className="px-4 py-3 text-center align-middle cursor-pointer"
-        onClick={() =>
-          especialidad.status
-            ? desabilitar(especialidad.id)
-            : habilitar(especialidad.id)
-        }
-      >
-        <span 
+      <td className="px-4 py-3 align-middle">{paciente.dni}</td>
+      <td className="px-4 py-3 align-middle">{paciente.name}</td>
+      <td className="px-4 py-3 align-middle">{paciente.lastname}</td>
+      <td className="px-4 py-3 align-middle truncate max-w-[150px]">{paciente.address}</td>
+      <td className="px-4 py-3 align-middle">{paciente.phone}</td>
+      <td className="px-4 py-3 align-middle">{paciente.birthdate}</td>
+      <td className="px-4 py-3 align-middle">
+        {paciente.gender === "MASCULINO" ? "Masculino" : "Femenino"}
+      </td>
+      <td className="px-4 py-3 text-center align-middle">
+        <span
           className={`inline-flex items-center rounded-full px-2.5 py-1 text-xs font-medium ${
-            especialidad.status
+            paciente.status
               ? "bg-emerald-50 text-emerald-700"
               : "bg-rose-50 text-rose-700"
           }`}
         >
-          {especialidad.status ? "Activo" : "Inactivo"}
+          {paciente.status ? "Activo" : "Inactivo"}
         </span>
       </td>
       <td className="px-4 py-3 text-right align-middle">

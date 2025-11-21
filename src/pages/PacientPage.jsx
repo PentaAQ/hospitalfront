@@ -1,8 +1,8 @@
 import { usePacientStore } from "../store/PacientStore";
-import { ModalPacient } from "../components/ModalPacient";
+import { ModalPacient } from "../components/modals/ModalPacient";
 import { BtnAddPacient } from "../components/ui/BtnAddPacient";
 import { useMostrarPacientesQuery } from "../stack/PacienteStack";
-import { RowTablePacients } from "../components/RowTablePacients";
+import { RowTablePacients } from "../components/rows/RowTablePacients";
 
 export const PacientPage = () => {
   const { modalPacientState } = usePacientStore();

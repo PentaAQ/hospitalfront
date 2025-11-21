@@ -1,8 +1,8 @@
-import { ModalEspecialities } from "../components/ModalEspecialities";
-import { RowTableEspecialities } from "../components/RowTableEspecialities";
-import { BtnAddEspecilities } from "../components/ui/BtnAddEspecilities";
 import { useEspecilitiesStore } from "../store/EspecilitiesStore";
 import { useMostrarEspecilitiesQuery } from "../stack/EspecilitiesStack";
+import { ModalEspecialities } from "../components/modals/ModalEspecialities";
+import { RowTableEspecialities } from "../components/rows/RowTableEspecialities";
+import { BtnAddEspecilities } from "../components/ui/BtnAddEspecilities";
 
 export const EspecialitiesPage = () => {
   const { modalEspecilities } = useEspecilitiesStore();
@@ -24,11 +24,11 @@ export const EspecialitiesPage = () => {
           <table className="w-full text-sm border-collapse">
             <thead className="bg-slate-50 text-slate-600">
               <tr>
-                <th className="px-4 py-3 text-left">Nombre</th>
-                <th className="px-4 py-3 text-left">Descripción</th>
-                <th className="px-4 py-3 text-left">Costo / hora</th>
-                <th className="px-4 py-3 text-left">Estado</th>
-                <th className="px-4 py-3 text-right">Acciones</th>
+                <th className="px-4 py-3 text-center">Nombre</th>
+                <th className="px-4 py-3 text-center">Descripción</th>
+                <th className="px-4 py-3 text-center">Costo / Consulta</th>
+                <th className="px-4 py-3 text-center">Estado</th>
+                <th className="px-4 py-3 text-center">Acciones</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">

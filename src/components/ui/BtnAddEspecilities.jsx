@@ -8,7 +8,7 @@ export const BtnAddEspecilities = () => {
       onClick={() => setModalEspecilities(true)}
     >
       <Icon icon="fluent-mdl2:circle-addition" width="20" height="20" />
-      <span>Agregar especialidad</span>
+      <span className="text-xs max-lg:hidden">Agregar especialidad</span>
     </button>
   );
 };

@@ -1,6 +1,6 @@
-import { usePacientStore } from "../store/PacientStore";
+import { usePacientStore } from "../../store/PacientStore";
 import { useForm } from "react-hook-form";
-import { useAgregarPacienteMutation } from "../stack/PacienteStack";
+import { useAgregarPacienteMutation } from "../../stack/PacienteStack";
 
 export const ModalPacient = () => {
   const { setModalPacientState } = usePacientStore();

@@ -1,13 +1,12 @@
-import { ModalPay } from "../components/ModalPay";
+import { ModalPay } from "../components/modals/ModalPay";
 import { BtnAddPay } from "../components/ui/BtnAddPay";
 import { usePayStore } from "../store/PayStore";
-import { obtenerTodosLosPagosQuery } from "../stack/PayStack";
-import { RowtTablePay } from "../components/RowtTablePay";
-
+import { useObtenerTodosLosPagosQuery } from "../stack/PayStack";
+import { RowtTablePay } from "../components/rows/RowtTablePay";
 
 export const PayPage = () => {
   const { modalPayState } = usePayStore();
-  const {data:pay}=obtenerTodosLosPagosQuery();
+  const { data: pay } = useObtenerTodosLosPagosQuery();
   return (
     <section className="h-full flex flex-col">
       {modalPayState && <ModalPay />}
@@ -35,10 +34,7 @@ export const PayPage = () => {
             </thead>
             <tbody className="divide-y divide-slate-100">
               {pay?.map((pay) => (
-                <RowtTablePay
-                  key={pay.id}
-                  pay={pay}
-                />
+                <RowtTablePay key={pay.id} pay={pay} />
               ))}
             </tbody>
           </table>

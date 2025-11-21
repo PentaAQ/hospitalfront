@@ -21,7 +21,7 @@ export const useAgregarPayMutation = () => {
     });
 };
 
-export const obtenerTodosLosPagosQuery = () => {
+export const useObtenerTodosLosPagosQuery = () => {
     const { obtenerTodosLosPagos } = usePayStore();
     const { token } = useAuthStore();
     return useQuery({

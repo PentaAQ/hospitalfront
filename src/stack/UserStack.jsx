@@ -9,12 +9,6 @@ export const useMostrarUsuariosQuery = () => {
   return useQuery({
     queryKey: ["mostrarUsuarios"],
     queryFn: () => mostrarUsuarios(token),
-    onSuccess: (data) => {
-      console.log(data);
-    },
-    onError: (error) => {
-      console.log(error);
-    },
   });
 };
 
@@ -25,14 +19,12 @@ export const useAgregarUsuariosMutation = () => {
   const { setModalUserState } = useUserStore();
   return useMutation({
     mutationFn: (newUser) => agregarUsuario(newUser, token),
-    onSuccess: (data) => {
-      console.log(data);
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["mostrarUsuarios"] });
       setModalUserState(false);
       toast.success("Usuario Añadido correctamente");
     },
     onError: (error) => {
-      console.log(error);
       toast.error(error.message);
     },
   });

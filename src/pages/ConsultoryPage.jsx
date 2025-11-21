@@ -1,12 +1,14 @@
 import { BtnAddConsultory } from "../components/ui/BtnAddConsultory";
 import { useConsultoryStore } from "../store/ConsultoryStore";
 import { useObtenerConsultoriosQuery } from "../stack/ConsultoryStack";
-import { RowTableConsultory } from "../components/RowTableConsultory";
-import { ModalConsultory } from "../components/ModalConsultory";
+import { RowTableConsultory } from "../components/rows/RowTableConsultory";
+import { ModalConsultory } from "../components/modals/ModalConsultory";
 
 export const ConsultoryPage = () => {
     const { modalConsultoryState } = useConsultoryStore();
     const { data: consultorios } = useObtenerConsultoriosQuery();
+    console.log(consultorios);
+    
   return (
     <section className="h-full flex flex-col">
       {modalConsultoryState && <ModalConsultory />}

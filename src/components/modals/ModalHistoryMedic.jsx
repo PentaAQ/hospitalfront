@@ -1,9 +1,9 @@
 import { useState, useEffect, useRef } from 'react';
-import { useHistoryMedicStore } from "../store/HistoryMedic";
+import { useHistoryMedicStore } from "../../store/HistoryMedic";
 import { useForm, Controller } from "react-hook-form";
-import { useAgregarHistoriaMedicaMutation } from "../stack/HistoryMedicStack";
-import { useMostrarPacientesQuery } from "../stack/PacienteStack";
-import { useAuthStore } from '../store/AuthStore';
+import { useAgregarHistoriaMedicaMutation } from "../../stack/HistoryMedicStack";
+import { useMostrarPacientesQuery } from "../../stack/PacienteStack";
+import { useAuthStore } from '../../store/AuthStore';
 
 export const ModalHistoryMedic = () => {
   const { setModalHistoryMedicState } = useHistoryMedicStore();
@@ -168,7 +168,7 @@ export const ModalHistoryMedic = () => {
               )}
             />
 
-            <div className="flex flex-col gap-1">
+            <div className=" flex-col gap-1 hidden">
               <label htmlFor="employeeInfo" className="text-sm font-medium text-slate-700">
                 Profesional
               </label>
