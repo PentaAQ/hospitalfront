@@ -45,6 +45,11 @@ export const Sidebar = () => {
       to: "/consultorios",
       icon: "vaadin:office",
     },
+    {
+      name: "Atencion Médica",
+      to: "/atencion-medica",
+      icon: "material-symbols:stethoscope",
+    }
   ];
   const { user } = useAuthStore();
 

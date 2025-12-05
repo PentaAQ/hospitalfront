@@ -39,7 +39,7 @@ export const LoginPage = () => {
               type="text"
               id="dni"
               className="border border-gray-300 rounded-lg p-2 w-full"
-              placeholder="Introduzca su DNI"
+              placeholder="12345678"
               {...register("dni", { required: "El DNI es requerido" })}
             />
             <p className="text-red-500">{errors.dni?.message}</p>
@@ -52,7 +52,7 @@ export const LoginPage = () => {
               type={showPassword ? "text" : "password"}
               id="password"
               className="border border-gray-300 rounded-lg p-2 w-full"
-              placeholder="Introduzca su contraseña"
+              placeholder="admin123"
               {...register("password", {
                 required: "La contraseña es requerida",
               })}

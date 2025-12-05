@@ -11,6 +11,7 @@ import { PacientPage } from "../pages/PacientPage";
 import { ConsultoryPage } from "../pages/ConsultoryPage";
 import { AppointmentsPage } from "../pages/AppointmentsPage";
 import { PayPage } from "../pages/PayPage";
+import { AttentionPage } from "../pages/AttentionPage";
 
 export const MyRoutes = () => (
   <BrowserRouter>
@@ -41,6 +42,7 @@ export const MyRoutes = () => (
         <Route path="/consultorios" element={<ConsultoryPage />} />
         <Route path="/citas" element={<AppointmentsPage />} />
         <Route path="/pagos" element={<PayPage />} />
+        <Route path="/atencion-medica" element={<AttentionPage />} />
       </Route>
     </Routes>
   </BrowserRouter>
